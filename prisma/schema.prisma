@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  img            String[] // MongoDB doesn't enforce foreign keys, store image URLs directly
+  specification  String?
+  configurations String?
+  categoryId     String
+  category       Category?   @relation(fields: [categoryId], references: [id])
+  highlights     Highlight[]
+  datasheet      String?
+  brochure       String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Highlight {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  productId   String
+  Product     Product @relation(fields: [productId], references: [id])
+}
+
+model Image {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  productId String
+}
+
+model Category {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String    @unique
+  img      String
+  products String[] // Store product IDs instead of a relational array
+  Product  Product[]
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  id_token          String?
+  scope             String?
+  session_state     String?
+  token_type        String?
+  User              User    @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  User         User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

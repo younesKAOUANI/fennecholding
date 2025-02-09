@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.section {
+  @apply container mx-auto px-4 md:px-0 py-20 overflow-hidden;
+}
+
+* {
+  @apply scroll-smooth transition-all duration-300;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+@font-face {
+  font-family: 'Cobe';
+  src: url('/fonts/Cobe-ExtraBold.ttf') format('ttf');
+}
+
+.font-cobe {
+  font-family: 'Cobe', sans-serif;
+}
+
+
+.slick-dots li button:before {
+  font-size: 15px;
+  color: #000;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #ff0000;
+}
