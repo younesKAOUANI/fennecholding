@@ -14,9 +14,6 @@ export const categoriesTableView = (fetchCases) => [
     disableGlobalFilter: true,
     Cell: ({ row }) => (
       <div className="w-auto my-2 flex gap-4">
-        <Link href={`/cases/${row.original.id}`} className="bg-blue-500 text-white shadow-md hover:scale-95 hover:shadow-md rounded-full p-2 flex items-center justify-center">
-          <CiEdit className="text-2xl" />
-        </Link>
         <DeleteButton id={row.original.id} fetchCases={fetchCases} />
       </div>
     ),

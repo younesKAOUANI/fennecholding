@@ -2,41 +2,64 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Select from "react-select";
 
-export default function AddProduct() {
+export default function EditProduct() {
   const router = useRouter();
+  const { id } = router.query;
+
   const [productForm, setProductForm] = useState({
     name: "",
     specification: "",
     configurations: "",
     categoryId: "",
     highlights: [{ title: "", description: "" }],
-    // These will be filled only after a successful upload
-    img: [],
+    img: [], // current images as an array of URLs
     datasheet: "",
     brochure: "",
   });
-  const [message, setMessage] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [uploading, setUploading] = useState(false);
 
-  // **New states for local file objects (not URLs yet)**
+  // Local file states (only if the user selects a new file)
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedDatasheet, setSelectedDatasheet] = useState(null);
   const [selectedBrochure, setSelectedBrochure] = useState(null);
 
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Fetch product data
   useEffect(() => {
-    const fetchCategories = async () => {
+    if (!id) return;
+    async function fetchProduct() {
       try {
-        const response = await fetch("/api/categories");
-        const data = await response.json();
+        const res = await fetch(`/api/products/${id}`);
+        if (!res.ok) throw new Error("Impossible de charger le produit");
+        const data = await res.json();
+        setProductForm(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProduct();
+  }, [id]);
+
+  // Fetch categories
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
         setCategories(data);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error de chargement des categories:", error);
       }
-    };
+    }
     fetchCategories();
   }, []);
 
+  // --- Form field handlers ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductForm((prev) => ({ ...prev, [name]: value }));
@@ -60,7 +83,7 @@ export default function AddProduct() {
     setProductForm((prev) => ({ ...prev, highlights: updatedHighlights }));
   };
 
-  // **New file selection handlers (do not upload yet)**
+  // --- File selection handlers ---
   const handleImageSelection = (e) => {
     const files = Array.from(e.target.files);
     setSelectedImages(files);
@@ -74,13 +97,13 @@ export default function AddProduct() {
     setSelectedBrochure(e.target.files[0]);
   };
 
-  // **Deferred upload function – called on submission**
+  // --- Deferred file upload during update ---
   const uploadFiles = async () => {
     const uploadedImageUrls = [];
     try {
       setUploading(true);
 
-      // Upload each image sequentially (or you can use Promise.all for parallel uploads)
+      // Upload any newly selected images
       for (const file of selectedImages) {
         const formData = new FormData();
         formData.append("file", file);
@@ -88,12 +111,13 @@ export default function AddProduct() {
           method: "POST",
           body: formData,
         });
-        if (!res.ok) throw new Error("Image upload failed");
+        if (!res.ok) throw new Error("Impossible de téléverser l'image");
         const { fileUrl } = await res.json();
         uploadedImageUrls.push(fileUrl);
       }
 
-      let datasheetUrl = "";
+      // If a new datasheet was selected, upload it; otherwise, keep the existing URL.
+      let datasheetUrl = productForm.datasheet;
       if (selectedDatasheet) {
         const formData = new FormData();
         formData.append("file", selectedDatasheet);
@@ -101,12 +125,13 @@ export default function AddProduct() {
           method: "POST",
           body: formData,
         });
-        if (!res.ok) throw new Error("Datasheet upload failed");
+        if (!res.ok) throw new Error("Echec de la téléversement du fichier de la datasheet");
         const data = await res.json();
         datasheetUrl = data.fileUrl;
       }
 
-      let brochureUrl = "";
+      // Same for brochure.
+      let brochureUrl = productForm.brochure;
       if (selectedBrochure) {
         const formData = new FormData();
         formData.append("file", selectedBrochure);
@@ -114,156 +139,67 @@ export default function AddProduct() {
           method: "POST",
           body: formData,
         });
-        if (!res.ok) throw new Error("Brochure upload failed");
+        if (!res.ok) throw new Error("Impossible de téléverser la brochure");
         const data = await res.json();
         brochureUrl = data.fileUrl;
       }
 
       return { uploadedImageUrls, datasheetUrl, brochureUrl };
     } catch (error) {
-      console.error("Error during file uploads:", error);
       throw error;
     } finally {
       setUploading(false);
     }
   };
 
-  // **Cancel function – deletes already uploaded files (if any) and resets state**
-  const handleCancelUploadedFiles = async (fileUrls) => {
-    const { uploadedImageUrls, datasheetUrl, brochureUrl } = fileUrls;
-    const deletePromises = [];
-    for (const url of uploadedImageUrls) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: url }),
-        })
-      );
-    }
-    if (datasheetUrl) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: datasheetUrl }),
-        })
-      );
-    }
-    if (brochureUrl) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: brochureUrl }),
-        })
-      );
-    }
-    await Promise.all(deletePromises);
-  };
-
-  // **Cancel button handler – invoked if the user decides to cancel product creation**
-  const handleCancel = async () => {
-    // If any files were already uploaded (for example, from a previous failed attempt), delete them.
-    if (productForm.img.length || productForm.datasheet || productForm.brochure) {
-      await handleCancelUploadedFiles({
-        uploadedImageUrls: productForm.img,
-        datasheetUrl: productForm.datasheet,
-        brochureUrl: productForm.brochure,
-      });
-    }
-    // Reset all form and file states
-    setProductForm({
-      name: "",
-      specification: "",
-      configurations: "",
-      categoryId: "",
-      highlights: [{ title: "", description: "" }],
-      img: [],
-      datasheet: "",
-      brochure: "",
-    });
-    setSelectedImages([]);
-    setSelectedDatasheet(null);
-    setSelectedBrochure(null);
-    setMessage("Product creation cancelled");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Validate required fields
-      if (!productForm.name || !productForm.categoryId) {
-        setMessage("Name and Category are required");
-        return;
-      }
-
-      // First upload the files
+      // Upload any new files and get their URLs.
       const { uploadedImageUrls, datasheetUrl, brochureUrl } = await uploadFiles();
 
-      // Prepare the product data including the file URLs
-      const productData = {
-        name: productForm.name,
-        specification: productForm.specification,
-        configurations: productForm.configurations,
-        categoryId: productForm.categoryId,
-        highlights: productForm.highlights,
-        img: uploadedImageUrls,
+      // For images: if any new images were uploaded, use those; otherwise keep the existing ones.
+      const finalImages = uploadedImageUrls.length > 0 ? uploadedImageUrls : productForm.img;
+
+      const updatedProductData = {
+        ...productForm,
+        img: finalImages,
         datasheet: datasheetUrl,
         brochure: brochureUrl,
       };
 
-      const resProduct = await fetch("/api/products", {
-        method: "POST",
+      // Send update request to the API.
+      const resUpdate = await fetch(`/api/products/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
+        body: JSON.stringify(updatedProductData),
       });
-
-      if (!resProduct.ok) {
-        // If product creation fails, clean up the uploaded files
-        await handleCancelUploadedFiles({
-          uploadedImageUrls,
-          datasheetUrl,
-          brochureUrl,
-        });
-        setMessage("Error creating product");
-        return;
-      }
-
-      const newProduct = await resProduct.json();
-      setMessage("Product created successfully!");
-
-      // Reset state upon success
-      setProductForm({
-        name: "",
-        specification: "",
-        configurations: "",
-        categoryId: "",
-        highlights: [{ title: "", description: "" }],
-        img: [],
-        datasheet: "",
-        brochure: "",
-      });
-      setSelectedImages([]);
-      setSelectedDatasheet(null);
-      setSelectedBrochure(null);
-      // Optionally, navigate away or update your UI
+      if (!resUpdate.ok) throw new Error("échec de la mise à jour du produit");
+      const updatedProduct = await resUpdate.json();
+      setMessage("Produit mis à jour!");
+      // Optionally, navigate away or update local state.
     } catch (error) {
-      console.error("Error:", error);
-      setMessage("Error creating product");
+      setMessage("échec de la mise à jour du produit");
     }
   };
 
+  const handleCancel = () => {
+    // Optionally navigate back to your products list.
+    router.push("/products");
+  };
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div style={{ padding: "2rem" }}>
-      <h1 className="text-3xl font-bold mb-6">Add Product</h1>
+      <h1 className="text-3xl font-bold mb-6">Mis à jour du produit</h1>
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-2">
         <input
           type="text"
           name="name"
           value={productForm.name}
           onChange={handleChange}
-          placeholder="Product Name"
+          placeholder="Produit"
           className="border border-gray-300 rounded-md p-2 w-full"
         />
 
@@ -278,7 +214,15 @@ export default function AddProduct() {
               categoryId: selected?.value || "",
             }))
           }
-          placeholder="Category"
+          value={
+            categories.find((cat) => cat.id === productForm.categoryId)
+              ? {
+                  value: productForm.categoryId,
+                  label: categories.find((cat) => cat.id === productForm.categoryId).name,
+                }
+              : null
+          }
+          placeholder="Categorie"
           isClearable
           className="w-full"
         />
@@ -299,24 +243,20 @@ export default function AddProduct() {
         />
 
         <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Highlights</h2>
+          <h2 className="text-xl font-bold mb-2 mt-6">Points forts</h2>
           {productForm.highlights.map((highlight, index) => (
             <div key={index} className="flex gap-2 mb-2">
               <input
                 type="text"
                 value={highlight.title}
-                onChange={(e) =>
-                  handleHighlightChange(index, "title", e.target.value)
-                }
-                placeholder="Title"
+                onChange={(e) => handleHighlightChange(index, "title", e.target.value)}
+                placeholder="Titre"
                 className="border border-gray-300 rounded-md p-2 w-full"
               />
               <input
                 type="text"
                 value={highlight.description}
-                onChange={(e) =>
-                  handleHighlightChange(index, "description", e.target.value)
-                }
+                onChange={(e) => handleHighlightChange(index, "description", e.target.value)}
                 placeholder="Description"
                 className="border border-gray-300 rounded-md p-2 w-full"
               />
@@ -338,39 +278,41 @@ export default function AddProduct() {
           </button>
         </div>
 
-        {/* File inputs now only save file objects locally */}
-        <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Product Images</h2>
+        {/* File inputs */}
+        <div className="col-span-2 mt-6">
+          <h2 className="text-xl font-bold mb-2">Images</h2>
           <input
             type="file"
             multiple
             onChange={handleImageSelection}
             className="border p-2 w-full"
           />
-          {selectedImages.length > 0 &&
-            selectedImages.map((file, index) => (
-              <p key={index}>{file.name}</p>
+          <div>
+            <p>IMages existantes:</p>
+            {productForm.img.map((url, index) => (
+              <p key={index}>{url}</p>
             ))}
+            {selectedImages.length > 0 &&
+              selectedImages.map((file, index) => <p key={index}>Nouveaux: {file.name}</p>)}
+          </div>
         </div>
 
         <div className="col-span-2">
           <h2 className="text-xl font-bold mb-2">Datasheet</h2>
-          <input
-            type="file"
-            onChange={handleDatasheetSelection}
-            className="border p-2 w-full"
-          />
-          {selectedDatasheet && <p>{selectedDatasheet.name}</p>}
+          <input type="file" onChange={handleDatasheetSelection} className="border p-2 w-full" />
+          <div>
+            <p>Datasheet existant: {productForm.datasheet || "None"}</p>
+            {selectedDatasheet && <p>Nouveau: {selectedDatasheet.name}</p>}
+          </div>
         </div>
 
         <div className="col-span-2">
           <h2 className="text-xl font-bold mb-2">Brochure</h2>
-          <input
-            type="file"
-            onChange={handleBrochureSelection}
-            className="border p-2 w-full"
-          />
-          {selectedBrochure && <p>{selectedBrochure.name}</p>}
+          <input type="file" onChange={handleBrochureSelection} className="border p-2 w-full" />
+          <div>
+            <p>Brochure existant: {productForm.brochure || "None"}</p>
+            {selectedBrochure && <p>Nouveaux: {selectedBrochure.name}</p>}
+          </div>
         </div>
 
         <div className="col-span-2 flex gap-2 mt-2">
@@ -379,14 +321,14 @@ export default function AddProduct() {
             className="bg-blue-500 text-white p-2 rounded-md flex-1"
             disabled={uploading}
           >
-            {uploading ? "Uploading..." : "Add Product"}
+            {uploading ? "Entrain de mis a jour..." : "Mis a jour"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className="bg-gray-500 text-white p-2 rounded-md flex-1"
           >
-            Cancel
+            Annuler
           </button>
         </div>
       </form>

@@ -48,12 +48,12 @@ export default function ProductPage() {
             <p>{product.configurations}</p>
 
             <div className="flex gap-4 items-center justify-start mt-8">
-              <Link href="#" className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95">
+              <a href={product.brochure} target="_blank" rel="noopener noreferrer" className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95">
                 Brochure
-              </Link>
-              <Link href="#" className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95">
+              </a>
+              <a href={product.datasheet} target="_blank" rel="noopener noreferrer" className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95">
                 Datasheet
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -81,10 +81,10 @@ function ProductGallery({ productData }) {
   const [selectedImage, setSelectedImage] = useState(productData.img?.[0] || "");
 
   return (
-    <div className="flex justify-center w-full gap-6 items-center h-[500px]">
+    <div className="flex justify-center w-full gap-6 items-center h-[650px]">
       {/* Main Image */}
       <div className="flex-1 flex justify-center items-center rounded-lg overflow-hidden">
-        <div className="w-full h-[500px] rounded-lg  overflow-hidden">
+        <div className="w-full h-[650px] rounded-lg  overflow-hidden">
           <Image
             src={selectedImage}
             alt={productData.name}
