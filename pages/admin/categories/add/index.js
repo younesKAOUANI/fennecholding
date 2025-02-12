@@ -34,8 +34,6 @@ export default function AddCategory() {
                 name: '',
                 img: '',
             });
-            // Optionally, redirect or refresh the category list:
-            // router.push('/categories');
         } catch (error) {
             console.error(error);
             setMessage('Error creating category');
@@ -44,9 +42,10 @@ export default function AddCategory() {
 
     return (
         <div style={{ padding: '2rem' }}>
-            <h1>Ajouter une Categorie</h1>
-            <form onSubmit={handleSubmit} style={{ maxWidth: '600px' }}>
-                <div>
+            <h1 className='font-bold text-4xl text-left mb-8'>Ajouter une Categorie</h1>
+            <form onSubmit={handleSubmit}>
+                <div className='grid grid-cols-2 gap-2'>
+
                     <input
                         type="text"
                         id="name"
@@ -56,8 +55,6 @@ export default function AddCategory() {
                         onChange={handleChange}
                         className='border border-gray-300 rounded-md p-2 w-full'
                     />
-                </div>
-                <div>
                     <input
                         type="text"
                         id="img"
@@ -68,8 +65,8 @@ export default function AddCategory() {
                         className='border border-gray-300 rounded-md p-2 w-full'
                     />
                 </div>
-                <button type="submit" style={{ marginTop: '1rem' }}>
-                    Add Category
+                <button type="submit" className='bg-blue-500 text-white rounded-md p-3 mt-4'> 
+                    Ajouter Categorie
                 </button>
             </form>
             {message && <p>{message}</p>}
