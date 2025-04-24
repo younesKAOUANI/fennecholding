@@ -1,25 +1,71 @@
-import React from 'react'
-const infoArray = [
-    { id: 1, title: "Recherche et Development:", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus," },
-    { id: 2, title: "Carbotech:", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus," },
-];
+import Image from 'next/image';
+import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function SolutionsSection() {
-    return (
-        <section style={{ backgroundImage: 'url(https://placehold.co/1080x600)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed' }} className="relative w-full overflow-hidden">
-            <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
-            <div className='section relative z-10'>
-                <h2 className='font-semibold text-4xl text-white text-center mb-10' data-aos="fade-down">Solutions de Pointe</h2>
-                <div className='grid md:grid-cols-2 md:gap-16 gap-8 text-white'>
-                    {infoArray.map((info, index) => (
-                        <div key={info.id} className='py-8 px-6 backdrop-filter backdrop-blur-lg bg-black/10 bg-opacity-50 rounded-lg' data-aos={index === 1 ? 'fade-left' : 'fade-right'}>
-                            <h3 className='text-3xl font-medium mb-4 text-center'>{info.title}</h3>
-                            <p className='text-center text-xl'>{info.description}</p>
-                        </div>
-                    ))}
+  const t = useTranslations('about.solutions');
+  const [activeTab, setActiveTab] = useState(0);
 
-                </div>
-            </div>
-        </section>
-    )
+  const infoArray = [
+    {
+      id: 1,
+      title: t('tabs.0.title'),
+      description: t('tabs.0.description'),
+    },
+    {
+      id: 2,
+      title: t('tabs.1.title'),
+      description: t('tabs.1.description'),
+    },
+    {
+      id: 3,
+      title: t('tabs.2.title'),
+      description: t('tabs.2.description'),
+    },
+  ];
+
+  return (
+    <section className='relative '>
+      <Image src='/solutions-image.png' alt='' width={300} height={400} className='absolute right-0 -top-32' />
+      <div className="section !pt-4 relative z-10">
+        <h2 className="text-5xl font-bold text-black mb-12">{t('title')}</h2>
+        <div className="flex gap-8 items-start">
+          {/* Tabs */}
+          <div className="flex flex-col p-3 min-w-[300px] gap-4 shadow-inner bg-gradient-to-r from-gray-100 to-gray-50 shadow-gray-400 rounded-xl">
+            {infoArray.map((item, index) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(index)}
+                className={`rounded-lg py-3 px-5 text-left font-semibold text-sm shadow-inner 
+                ${activeTab === index
+                    ? 'bg-red-600 text-white shadow-md'
+                    : 'bg-gray-100 hover:bg-gray-100'
+                  }`}
+              >
+                {item.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Content */}
+          <div className="bg-white rounded-xl shadow-inner bg-gradient-to-r from-gray-100 to-gray-50 shadow-gray-400 p-6 text-lg text-gray-800">
+            <p>{infoArray[activeTab].description}</p>
+          </div>
+        </div>
+      </div>
+      <div className='relative bg-white h-[500px] border-y-4 border-primary/60'>
+        {/* Left Half Background Image */}
+        <div
+          className='absolute top-0 left-0 w-1/2 h-full bg-cover bg-center border-r-2 border-primary/60'
+          style={{ backgroundImage: "url('/images/solutions-1.png')" }}
+        ></div>
+
+        {/* Right Half Background Image */}
+        <div
+          className='absolute top-0 right-0 w-1/2 h-full bg-cover bg-center border-l-2 border-primary/60'
+          style={{ backgroundImage: "url('/images/solutions-2.png')" }}
+        ></div>
+      </div>
+    </section>
+  );
 }

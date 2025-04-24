@@ -1,20 +1,18 @@
-import Map from '@/components/AboutPage/Map'
-import Advantages from '@/components/LeasingPage/Advantages'
-import Banner from '@/components/main/Banner'
-import InfoSection from '@/components/main/InfoSection'
+import LeasingAdvantages from '@/components/LeasingPage/LeasingAdvantages'
+import LeasingAndFincancement from '@/components/LeasingPage/LeasingAndFinancement'
+import LeasingContact from '@/components/LeasingPage/LeasingContact'
+import LeasingHero from '@/components/LeasingPage/LeasingHero'
+import Image from 'next/image'
 import React from 'react'
 
 export default function index() {
     return (
-        <main className='!pt-20'>
-            <Banner title='Location et financement' backgroundImage='https://placehold.co/1080x600' />
-            <InfoSection title={'Équipement de qualité'}
-                description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus.'}
-                img={'https://placehold.co/500x400.png'}
-                alt={'DNA'}
-                imgOrder={'order-2'}
-            />
-            <Advantages />
+        <main className='relative !pt-8 bg-gray-50'>
+            <Image src='/leasinghero-image.png' alt='Our DNA' width={300} height={400} className='absolute top-0 right-0' />
+            <LeasingHero />
+            <LeasingAndFincancement />
+            <LeasingAdvantages />
+            <LeasingContact />
         </main>
     )
 }

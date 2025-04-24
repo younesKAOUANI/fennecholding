@@ -1,29 +1,39 @@
-import React, { useEffect } from 'react'
-
-const stats = [
-    { label: 'de produits', number: 'Plus de 200 millions' },
-    { label: 'catégories de produits', number: 59000 },
-    // { label: 'fournisseurs', number: 120 },
-    // { label: 'pays et régions', number: 59 },
-]
+"use client";
+import React from 'react';
+import { FaTools, FaCogs, FaWrench, FaBoxOpen } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
 
 export default function Stats() {
+  const t = useTranslations('services.stats');
 
-    return (
-        <section className=''>
-            <div className='section grid md:grid-cols-3 gap-8 items-center'>
-                <div className='md:col-span-2' data-aos='fade-right'>
-                    <h2 className='font-semibold md:text-4xl text-xl md:text-left text-center'>Explorez des millions d'offres adaptées aux besoins de votre entreprise</h2>
-                </div>
-                <div className='grid grid-cols-2 md:gap-8 gap-2 w-full'>
-                    {stats.map((stat, index) => (
-                        <div key={index} className="bg-white text-center shadow-md rounded-lg p-4 md:border-l-4 md:border-t-0 border-t-4 border-primary" data-aos='fade-left' data-aos-delay={index * 100}>
-                            <h3 className="text-2xl font-medium">{stat.number}</h3>
-                            <p className="text-lg">{stat.label}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    )
+  const stats = [
+    { label: t('stats.0'), icon: <FaTools size={32} className="mx-auto mb-2 text-primary" /> },
+    { label: t('stats.1'), icon: <FaCogs size={32} className="mx-auto mb-2 text-primary" /> },
+    { label: t('stats.2'), icon: <FaWrench size={32} className="mx-auto mb-2 text-primary" /> },
+    { label: t('stats.3'), icon: <FaBoxOpen size={32} className="mx-auto mb-2 text-primary" /> },
+  ];
+
+  return (
+    <section>
+      <div className='section grid md:grid-cols-5 gap-8 items-center'>
+        <h2
+          data-aos='fade-right'
+          className='font-medium text-xl md:text-left text-center max-w-[150px]'
+        >
+          {t('title')}
+        </h2>
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white h-full text-center shadow-inner bg-gradient-to-r from-gray-100 to-gray-50 shadow-gray-400 rounded-lg p-4"
+            data-aos='fade-left'
+            data-aos-delay={index * 100}
+          >
+            {stat.icon}
+            <p className="text-lg">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

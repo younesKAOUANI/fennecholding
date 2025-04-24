@@ -1,396 +1,528 @@
-import React, { useState, useEffect } from "react";
+  import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Select from "react-select";
 
 export default function AddProduct() {
   const router = useRouter();
   const [productForm, setProductForm] = useState({
-    name: "",
-    specification: "",
-    configurations: "",
+    images: [], // Array of uploaded image URLs
     categoryId: "",
-    highlights: [{ title: "", description: "" }],
-    // These will be filled only after a successful upload
-    img: [],
-    datasheet: "",
-    brochure: "",
+    datasheet: "", // URL from uploaded datasheet
+    brochure: "", // URL from uploaded brochure
+    translations: [
+      {
+        locale: "en",
+        name: "",
+        specifications: "",
+        configurations: "",
+        highlights: [{ title: "", description: "" }],
+      },
+      {
+        locale: "fr",
+        name: "",
+        specifications: "",
+        configurations: "",
+        highlights: [{ title: "", description: "" }],
+      },
+      {
+        locale: "ar",
+        name: "",
+        specifications: "",
+        configurations: "",
+        highlights: [{ title: "", description: "" }],
+      },
+    ],
   });
+  const [imageFiles, setImageFiles] = useState([]); // Selected image files
+  const [datasheetFile, setDatasheetFile] = useState(null); // Selected datasheet file
+  const [brochureFile, setBrochureFile] = useState(null); // Selected brochure file
   const [message, setMessage] = useState("");
   const [categories, setCategories] = useState([]);
-  const [uploading, setUploading] = useState(false);
-
-  // **New states for local file objects (not URLs yet)**
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedDatasheet, setSelectedDatasheet] = useState(null);
-  const [selectedBrochure, setSelectedBrochure] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch("/api/categories");
+        if (!response.ok) throw new Error("Failed to fetch categories");
         const data = await response.json();
-        setCategories(data);
+        setCategories(
+          data.map((cat) => ({
+            value: cat.id,
+            label: cat.translations.find((t) => t.locale === "fr")?.name || "N/A",
+          }))
+        );
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Erreur lors de la récupération des catégories:", error);
+        setMessage("Erreur lors de la récupération des catégories");
       }
     };
     fetchCategories();
   }, []);
 
-  const handleChange = (e) => {
+  const handleFileChange = (e, type) => {
+    const file = e.target.files[0];
+    if (type === "image") {
+      const files = Array.from(e.target.files);
+      setImageFiles((prev) => [...prev, ...files]);
+    } else if (type === "datasheet") {
+      setDatasheetFile(file);
+    } else if (type === "brochure") {
+      setBrochureFile(file);
+    }
+  };
+
+  const removeFile = (type, index) => {
+    if (type === "image") {
+      setImageFiles((prev) => prev.filter((_, i) => i !== index));
+      setProductForm((prev) => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index),
+      }));
+    } else if (type === "datasheet") {
+      setDatasheetFile(null);
+      setProductForm((prev) => ({ ...prev, datasheet: "" }));
+    } else if (type === "brochure") {
+      setBrochureFile(null);
+      setProductForm((prev) => ({ ...prev, brochure: "" }));
+    }
+  };
+
+  const handleChange = (e, locale) => {
     const { name, value } = e.target;
-    setProductForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleHighlightChange = (index, field, value) => {
-    const updatedHighlights = [...productForm.highlights];
-    updatedHighlights[index][field] = value;
-    setProductForm((prev) => ({ ...prev, highlights: updatedHighlights }));
-  };
-
-  const addHighlight = () => {
     setProductForm((prev) => ({
       ...prev,
-      highlights: [...prev.highlights, { title: "", description: "" }],
+      translations: prev.translations.map((t) =>
+        t.locale === locale ? { ...t, [name]: value } : t
+      ),
     }));
   };
 
-  const removeHighlight = (index) => {
-    const updatedHighlights = productForm.highlights.filter((_, i) => i !== index);
-    setProductForm((prev) => ({ ...prev, highlights: updatedHighlights }));
+  const handleHighlightChange = (locale, index, field, value) => {
+    setProductForm((prev) => ({
+      ...prev,
+      translations: prev.translations.map((t) =>
+        t.locale === locale
+          ? {
+              ...t,
+              highlights: t.highlights.map((h, i) =>
+                i === index ? { ...h, [field]: value } : h
+              ),
+            }
+          : t
+      ),
+    }));
   };
 
-  // **New file selection handlers (do not upload yet)**
-  const handleImageSelection = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedImages(files);
+  const addHighlight = (locale) => {
+    setProductForm((prev) => ({
+      ...prev,
+      translations: prev.translations.map((t) =>
+        t.locale === locale
+          ? {
+              ...t,
+              highlights: [...t.highlights, { title: "", description: "" }],
+            }
+          : t
+      ),
+    }));
   };
 
-  const handleDatasheetSelection = (e) => {
-    setSelectedDatasheet(e.target.files[0]);
+  const removeHighlight = (locale, index) => {
+    setProductForm((prev) => ({
+      ...prev,
+      translations: prev.translations.map((t) =>
+        t.locale === locale
+          ? {
+              ...t,
+              highlights: t.highlights.filter((_, i) => i !== index),
+            }
+          : t
+      ),
+    }));
   };
 
-  const handleBrochureSelection = (e) => {
-    setSelectedBrochure(e.target.files[0]);
-  };
-
-  // **Deferred upload function – called on submission**
-  const uploadFiles = async () => {
-    const uploadedImageUrls = [];
+  const uploadFileToFTP = async (file, type) => {
+    if (!file) throw new Error(`Aucun fichier sélectionné pour ${type}`);
+    const formData = new FormData();
+    formData.append("file", file);
     try {
-      setUploading(true);
-
-      // Upload each image sequentially (or you can use Promise.all for parallel uploads)
-      for (const file of selectedImages) {
-        const formData = new FormData();
-        formData.append("file", file);
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        if (!res.ok) throw new Error("Image upload failed");
-        const { fileUrl } = await res.json();
-        uploadedImageUrls.push(fileUrl);
-      }
-
-      let datasheetUrl = "";
-      if (selectedDatasheet) {
-        const formData = new FormData();
-        formData.append("file", selectedDatasheet);
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        if (!res.ok) throw new Error("Datasheet upload failed");
-        const data = await res.json();
-        datasheetUrl = data.fileUrl;
-      }
-
-      let brochureUrl = "";
-      if (selectedBrochure) {
-        const formData = new FormData();
-        formData.append("file", selectedBrochure);
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        if (!res.ok) throw new Error("Brochure upload failed");
-        const data = await res.json();
-        brochureUrl = data.fileUrl;
-      }
-
-      return { uploadedImageUrls, datasheetUrl, brochureUrl };
-    } catch (error) {
-      console.error("Error during file uploads:", error);
-      throw error;
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // **Cancel function – deletes already uploaded files (if any) and resets state**
-  const handleCancelUploadedFiles = async (fileUrls) => {
-    const { uploadedImageUrls, datasheetUrl, brochureUrl } = fileUrls;
-    const deletePromises = [];
-    for (const url of uploadedImageUrls) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: url }),
-        })
-      );
-    }
-    if (datasheetUrl) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: datasheetUrl }),
-        })
-      );
-    }
-    if (brochureUrl) {
-      deletePromises.push(
-        fetch("/api/delete-file", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileUrl: brochureUrl }),
-        })
-      );
-    }
-    await Promise.all(deletePromises);
-  };
-
-  // **Cancel button handler – invoked if the user decides to cancel product creation**
-  const handleCancel = async () => {
-    // If any files were already uploaded (for example, from a previous failed attempt), delete them.
-    if (productForm.img.length || productForm.datasheet || productForm.brochure) {
-      await handleCancelUploadedFiles({
-        uploadedImageUrls: productForm.img,
-        datasheetUrl: productForm.datasheet,
-        brochureUrl: productForm.brochure,
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
       });
+      if (!response.ok) throw new Error(`Échec du téléchargement du ${type}`);
+      const { fileUrl } = await response.json();
+      return fileUrl;
+    } catch (error) {
+      throw new Error(
+        `Erreur lors du téléchargement du ${type}: ${error.message}`
+      );
     }
-    // Reset all form and file states
-    setProductForm({
-      name: "",
-      specification: "",
-      configurations: "",
-      categoryId: "",
-      highlights: [{ title: "", description: "" }],
-      img: [],
-      datasheet: "",
-      brochure: "",
-    });
-    setSelectedImages([]);
-    setSelectedDatasheet(null);
-    setSelectedBrochure(null);
-    setMessage("Product creation cancelled");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!productForm.categoryId) {
+      setMessage("Veuillez sélectionner une catégorie.");
+      return;
+    }
+
+    if (imageFiles.length === 0) {
+      setMessage("Veuillez téléverser au moins une image.");
+      return;
+    }
+
+    const hasEmptyTranslations = productForm.translations.some(
+      (t) => !t.name.trim() || !t.specifications.trim() || !t.configurations.trim()
+    );
+    if (hasEmptyTranslations) {
+      setMessage(
+        "Veuillez fournir un nom, des spécifications et des configurations pour chaque langue (Anglais, Français, Arabe)."
+      );
+      return;
+    }
+
+    const hasEmptyHighlights = productForm.translations.some((t) =>
+      t.highlights.some((h) => !h.title.trim() || !h.description.trim())
+    );
+    if (hasEmptyHighlights) {
+      setMessage(
+        "Veuillez remplir tous les champs des points forts pour chaque langue."
+      );
+      return;
+    }
+
     try {
-      // Validate required fields
-      if (!productForm.name || !productForm.categoryId) {
-        setMessage("Name and Category are required");
-        return;
+      // Upload images
+      const imageUrls = await Promise.all(
+        imageFiles.map((file) => uploadFileToFTP(file, "image"))
+      );
+
+      // Upload datasheet and brochure (if provided)
+      let datasheetUrl = "";
+      if (datasheetFile) {
+        datasheetUrl = await uploadFileToFTP(datasheetFile, "fiche technique");
+      }
+      let brochureUrl = "";
+      if (brochureFile) {
+        brochureUrl = await uploadFileToFTP(brochureFile, "brochure");
       }
 
-      // First upload the files
-      const { uploadedImageUrls, datasheetUrl, brochureUrl } = await uploadFiles();
-
-      // Prepare the product data including the file URLs
-      const productData = {
-        name: productForm.name,
-        specification: productForm.specification,
-        configurations: productForm.configurations,
-        categoryId: productForm.categoryId,
-        highlights: productForm.highlights,
-        img: uploadedImageUrls,
+      const updatedForm = {
+        ...productForm,
+        images: imageUrls,
         datasheet: datasheetUrl,
         brochure: brochureUrl,
       };
 
-      const resProduct = await fetch("/api/products", {
+      const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
+        body: JSON.stringify(updatedForm),
       });
 
-      if (!resProduct.ok) {
-        // If product creation fails, clean up the uploaded files
-        await handleCancelUploadedFiles({
-          uploadedImageUrls,
-          datasheetUrl,
-          brochureUrl,
-        });
-        setMessage("Error creating product");
-        return;
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Échec de la création du produit");
       }
 
-      const newProduct = await resProduct.json();
-      setMessage("Product created successfully!");
-
-      // Reset state upon success
+      setMessage("Produit créé avec succès !");
       setProductForm({
-        name: "",
-        specification: "",
-        configurations: "",
+        images: [],
         categoryId: "",
-        highlights: [{ title: "", description: "" }],
-        img: [],
         datasheet: "",
         brochure: "",
+        translations: [
+          {
+            locale: "en",
+            name: "",
+            specifications: "",
+            configurations: "",
+            highlights: [{ title: "", description: "" }],
+          },
+          {
+            locale: "fr",
+            name: "",
+            specifications: "",
+            configurations: "",
+            highlights: [{ title: "", description: "" }],
+          },
+          {
+            locale: "ar",
+            name: "",
+            specifications: "",
+            configurations: "",
+            highlights: [{ title: "", description: "" }],
+          },
+        ],
       });
-      setSelectedImages([]);
-      setSelectedDatasheet(null);
-      setSelectedBrochure(null);
-      // Optionally, navigate away or update your UI
+      setImageFiles([]);
+      setDatasheetFile(null);
+      setBrochureFile(null);
+      setTimeout(() => router.push("/admin/products"), 1500);
     } catch (error) {
-      console.error("Error:", error);
-      setMessage("Error creating product");
+      console.error("Erreur lors de la création du produit:", error);
+      setMessage(`Erreur : ${error.message}`);
     }
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1 className="text-3xl font-bold mb-6">Add Product</h1>
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-2">
-        <input
-          type="text"
-          name="name"
-          value={productForm.name}
-          onChange={handleChange}
-          placeholder="Product Name"
-          className="border border-gray-300 rounded-md p-2 w-full"
-        />
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Ajouter un Produit</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Catégorie
+          </label>
+          <Select
+            options={categories}
+            onChange={(selected) =>
+              setProductForm((prev) => ({
+                ...prev,
+                categoryId: selected?.value || "",
+              }))
+            }
+            placeholder="Sélectionner une catégorie"
+            isClearable
+            className="w-full"
+          />
+        </div>
 
-        <Select
-          options={categories.map((cat) => ({
-            value: cat.id,
-            label: cat.name,
-          }))}
-          onChange={(selected) =>
-            setProductForm((prev) => ({
-              ...prev,
-              categoryId: selected?.value || "",
-            }))
-          }
-          placeholder="Category"
-          isClearable
-          className="w-full"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Images
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(e) => handleFileChange(e, "image")}
+            className="w-full p-3 border border-gray-300 rounded-md"
+          />
+          {imageFiles.length > 0 && (
+            <div className="mt-2 space-y-2">
+              {imageFiles.map((file, index) => (
+                <div key={index} className="flex items-center gap-4">
+                  <span className="text-sm text-gray-600">{file.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeFile("image", index)}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-        <textarea
-          name="specification"
-          value={productForm.specification}
-          onChange={handleChange}
-          placeholder="Specifications"
-          className="border border-gray-300 rounded-md p-2 w-full col-span-2"
-        />
-        <textarea
-          name="configurations"
-          value={productForm.configurations}
-          onChange={handleChange}
-          placeholder="Configurations"
-          className="border border-gray-300 rounded-md p-2 w-full col-span-2"
-        />
-
-        <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Highlights</h2>
-          {productForm.highlights.map((highlight, index) => (
-            <div key={index} className="flex gap-2 mb-2">
-              <input
-                type="text"
-                value={highlight.title}
-                onChange={(e) =>
-                  handleHighlightChange(index, "title", e.target.value)
-                }
-                placeholder="Title"
-                className="border border-gray-300 rounded-md p-2 w-full"
-              />
-              <input
-                type="text"
-                value={highlight.description}
-                onChange={(e) =>
-                  handleHighlightChange(index, "description", e.target.value)
-                }
-                placeholder="Description"
-                className="border border-gray-300 rounded-md p-2 w-full"
-              />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Fiche Technique
+          </label>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => handleFileChange(e, "datasheet")}
+            className="w-full p-3 border border-gray-300 rounded-md"
+          />
+          {datasheetFile && (
+            <div className="mt-2 flex items-center gap-4">
+              <span className="text-sm text-gray-600">{datasheetFile.name}</span>
               <button
                 type="button"
-                onClick={() => removeHighlight(index)}
-                className="bg-red-500 text-white p-2 rounded-md"
+                onClick={() => removeFile("datasheet")}
+                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
               >
-                X
+                Supprimer
               </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addHighlight}
-            className="bg-green-500 text-white p-2 rounded-md mt-2"
-          >
-            + Add Highlight
-          </button>
+          )}
         </div>
 
-        {/* File inputs now only save file objects locally */}
-        <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Product Images</h2>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Brochure
+          </label>
           <input
             type="file"
-            multiple
-            onChange={handleImageSelection}
-            className="border p-2 w-full"
+            accept=".pdf"
+            onChange={(e) => handleFileChange(e, "brochure")}
+            className="w-full p-3 border border-gray-300 rounded-md"
           />
-          {selectedImages.length > 0 &&
-            selectedImages.map((file, index) => (
-              <p key={index}>{file.name}</p>
-            ))}
+          {brochureFile && (
+            <div className="mt-2 flex items-center gap-4">
+              <span className="text-sm text-gray-600">{brochureFile.name}</span>
+              <button
+                type="button"
+                onClick={() => removeFile("brochure")}
+                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+              >
+                Supprimer
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Datasheet</h2>
-          <input
-            type="file"
-            onChange={handleDatasheetSelection}
-            className="border p-2 w-full"
-          />
-          {selectedDatasheet && <p>{selectedDatasheet.name}</p>}
-        </div>
+        {productForm.translations.map((translation) => (
+          <div key={translation.locale} className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Traduction (
+              {translation.locale === "en"
+                ? "Anglais"
+                : translation.locale === "fr"
+                ? "Français"
+                : "Arabe"}
+              )
+            </h2>
+            <div>
+              <label
+                htmlFor={`name-${translation.locale}`}
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Nom
+              </label>
+              <input
+                type="text"
+                id={`name-${translation.locale}`}
+                name="name"
+                value={translation.name}
+                onChange={(e) => handleChange(e, translation.locale)}
+                placeholder={`Nom en ${
+                  translation.locale === "en"
+                    ? "Anglais"
+                    : translation.locale === "fr"
+                    ? "Français"
+                    : "Arabe"
+                }`}
+                dir={translation.locale === "ar" ? "rtl" : "ltr"}
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor={`specifications-${translation.locale}`}
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Spécifications
+              </label>
+              <textarea
+                id={`specifications-${translation.locale}`}
+                name="specifications"
+                value={translation.specifications}
+                onChange={(e) => handleChange(e, translation.locale)}
+                placeholder={`Spécifications en ${
+                  translation.locale === "en"
+                    ? "Anglais"
+                    : translation.locale === "fr"
+                    ? "Français"
+                    : "Arabe"
+                }`}
+                dir={translation.locale === "ar" ? "rtl" : "ltr"}
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                rows={4}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor={`configurations-${translation.locale}`}
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Configurations
+              </label>
+              <textarea
+                id={`configurations-${translation.locale}`}
+                name="configurations"
+                value={translation.configurations}
+                onChange={(e) => handleChange(e, translation.locale)}
+                placeholder={`Configurations en ${
+                  translation.locale === "en"
+                    ? "Anglais"
+                    : translation.locale === "fr"
+                    ? "Français"
+                    : "Arabe"
+                }`}
+                dir={translation.locale === "ar" ? "rtl" : "ltr"}
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                rows={4}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Points Forts
+              </label>
+              {translation.highlights.map((highlight, index) => (
+                <div key={index} className="flex gap-4 mb-2 items-center">
+                  <input
+                    type="text"
+                    value={highlight.title}
+                    onChange={(e) =>
+                      handleHighlightChange(
+                        translation.locale,
+                        index,
+                        "title",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Titre"
+                    dir={translation.locale === "ar" ? "rtl" : "ltr"}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <input
+                    type="text"
+                    value={highlight.description}
+                    onChange={(e) =>
+                      handleHighlightChange(
+                        translation.locale,
+                        index,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Description"
+                    dir={translation.locale === "ar" ? "rtl" : "ltr"}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {translation.highlights.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeHighlight(translation.locale, index)}
+                      className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addHighlight(translation.locale)}
+                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+              >
+                Ajouter un Point Fort
+              </button>
+            </div>
+          </div>
+        ))}
 
-        <div className="col-span-2">
-          <h2 className="text-xl font-bold mb-2">Brochure</h2>
-          <input
-            type="file"
-            onChange={handleBrochureSelection}
-            className="border p-2 w-full"
-          />
-          {selectedBrochure && <p>{selectedBrochure.name}</p>}
-        </div>
-
-        <div className="col-span-2 flex gap-2 mt-2">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white p-2 rounded-md flex-1"
-            disabled={uploading}
-          >
-            {uploading ? "Uploading..." : "Add Product"}
-          </button>
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="bg-gray-500 text-white p-2 rounded-md flex-1"
-          >
-            Cancel
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Ajouter Produit
+        </button>
       </form>
-      {message && <p className="mt-4">{message}</p>}
+      {message && (
+        <p
+          className={`mt-4 text-center ${
+            message.includes("Erreur") ? "text-red-600" : "text-green-600"
+          }`}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 }

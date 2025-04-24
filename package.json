@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
-    "migrate": "cp prisma/dev.db /tmp/db.db && prisma migrate deploy",
+    "prisma": "prisma generate",
     "dev": "next dev",
     "build": " next build",
-    "start": "next start",
+    "start": "node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -23,6 +22,7 @@
     "framer-motion": "^12.0.6",
     "next": "14.2.17",
     "next-auth": "^4.24.11",
+    "next-intl": "^4.0.2",
     "prisma": "^6.2.1",
     "react": "^18",
     "react-countup": "^6.5.3",

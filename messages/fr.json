@@ -1,0 +1,181 @@
+{
+  "header": {
+    "home": "Accueil",
+    "products": "Produits",
+    "services": "Services",
+    "leasing": "Location",
+    "about": "À propos",
+    "search_placeholder": "Rechercher..."
+  },
+  "footer": {
+    "title": "Nous Sommes Là Pour Vous",
+    "phone_label": "Numéro de téléphone :",
+    "phone": "+225 07 65 34 56 78",
+    "email_label": "Email :",
+    "email": "contact@fennecholdings.dz",
+    "address_label": "Adresse :",
+    "address": "R.N-N°5 - Entrée De Hraicha Amar - Ain Smara (w) Constantine, Constantine 25140",
+    "copyright": "© 2025 Fennecholdings. Tous droits réservés."
+  },
+  "hero": {
+    "title": "Votre Partenaire de Construction",
+    "subtitle": "Le partenaire parfait pour vos projets"
+  },
+  "trusted": {
+    "partners_label": "Nos Partenaires et Clients",
+    "title": "Ils Nous Ont Fait Confiance"
+  },
+  "about": {
+    "title": "À propos",
+    "description": "En savoir plus sur Fennec Holding.",
+    "us": {
+      "label": "Qui Sommes Nous?",
+      "title": "Le partenaire parfait pour votre projet",
+      "description1": "Nous sommes bien plus qu’un fournisseur : nous sommes votre partenaire de confiance pour mener vos projets de construction à la réussite.",
+      "description2": "Spécialisés dans les équipements pour le béton, nous offrons des solutions complètes, de la recherche et développement à la fabrication, en passant par un service après-vente de proximité.",
+      "description3": "Nos machines, conçues selon les normes européennes les plus strictes, garantissent qualité, performance et sécurité.",
+      "stats": [
+        "Paiements abordables",
+        "Flexibilité des échéances"
+      ]
+    },
+    "mission": {
+      "label": "Notre Mission",
+      "title": "Construire l’avenir, ensemble",
+      "description": "Notre Mission est de fournir des solutions de construction innovantes et de qualité, tout en valorisant le potentiel de notre équipe pour créer une valeur durable.",
+      "stats": [
+        "Paiements abordables",
+        "Flexibilité des échéances"
+      ]
+    },
+    "advantages": {
+      "stats": [
+        {
+          "label": "Intégrité",
+          "text": "Nous agissons avec honnêteté et transparence, honorant chaque engagement pris envers nos clients et partenaires."
+        },
+        {
+          "label": "Innovation",
+          "text": "Nous évoluons avec notre temps, cherchant constamment des solutions modernes pour répondre aux défis de demain."
+        },
+        {
+          "label": "Excellence",
+          "text": "Nous visons la perfection dans la qualité de nos produits et services, sans compromis."
+        },
+        {
+          "label": "Collaboration",
+          "text": "Nous croyons au pouvoir du travail d’équipe, partageant les succès avec nos clients et partenaires."
+        }
+      ]
+    },
+    "dna": {
+      "label": "Qui Sommes Nous?",
+      "title": "Notre ADN",
+      "description1": "Nous sommes bien plus qu’un fournisseur : nous sommes votre partenaire de confiance pour mener vos projets de construction à la réussite.",
+      "description2": "Spécialisés dans les équipements pour le béton, nous offrons des solutions complètes, de la recherche et développement à la fabrication, en passant par un service après-vente de proximité.",
+      "description3": "Nos machines, conçues selon les normes européennes les plus strictes, garantissent qualité, performance et sécurité.",
+      "button": "Voir Plus"
+    },
+    "solutions": {
+      "title": "Solutions de Pointe",
+      "tabs": [
+        {
+          "title": "Recherche et Développement",
+          "description": "Si la créativité doit s’épanouir sans entraves, la réalisation d’un produit fini demande rigueur et discipline. C’est pourquoi nous avons renforcé notre département Recherche & Développement et investi dans des outils de pointe pour garantir la viabilité de nos idées. Notre Centre de Test Européen, unique en son genre, incarne cet engagement en nous permettant de soumettre chaque composant à des essais rigoureux."
+        },
+        {
+          "title": "Smartronic™",
+          "description": "Le système Smartronic™ de FENNEC est une prouesse électronique qui améliore les performances et la sécurité des pompes montées sur camion et des pompes malaxeurs. Il facilite la gestion de la machine grâce à une interface intuitive et centralise les données essentielles pour une surveillance en temps réel de ses composants principaux. Smartronic™ régule de façon autonome l’unité de pompage, la pression et la vitesse du moteur, assurant une efficacité et une fiabilité optimales."
+        },
+        {
+          "title": "Carbotech",
+          "description": "Depuis 2010, FENNEC équipe ses pompes montées sur camion et pompes malaxeurs haut de gamme de fibre de carbone. Ce matériau composite, plus léger que l’acier et aisément réparable, offre des performances remarquables. En l’appliquant aux sections terminales du bras, nous améliorons la stabilité de la machine tout en réduisant son poids total."
+        }
+      ]
+    }
+  },
+  "products": {
+    "title": "Produits",
+    "description": "Découvrez notre gamme de produits de construction.",
+    "featured": {
+      "title": "Explorez Tous les Produits Fennec",
+      "button": "Voir Plus"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "description": "Découvrez nos services de construction et de conseil.",
+    "stats": {
+      "title": "Une solution complète pour vos projets de construction",
+      "stats": [
+        "Installation",
+        "Mise en Service",
+        "Service",
+        "Pièces de Rechange"
+      ]
+    },
+    "replacement_advantages": {
+      "title": "Avantages Fennec",
+      "stats": [
+        "Garantie des Pièces",
+        "Livraison Express",
+        "Disponibilité",
+        "Prix Compétitifs"
+      ]
+    },
+    "after_sale": {
+      "label": "Service Après-Vente",
+      "title": "Une Équipe d’Experts à Votre Service",
+      "description": "Notre engagement ne s’arrête pas à la livraison de nos équipements. Nous offrons une assistance réactive et professionnelle et des pièces de rechange d’origine pour garantir la performance et la longévité de vos machines.",
+      "button": "Voir Plus"
+    },
+    "hero": {
+      "title": "Services Après-Vente",
+      "stats": [
+        "Assistance",
+        "Pièces de Rechange"
+      ]
+    },
+    "after_sale_advantages": {
+      "title": "Avantages Fennec",
+      "stats": [
+        "Réactivité Immédiate",
+        "Visites sur Site",
+        "Maintenance",
+        "Experts Qualifiés",
+        "Support Technique Avancé"
+      ]
+    },
+    "replacement_pieces": {
+      "label": "Pièces de Rechange",
+      "title": "Pièces d’Origine, à Portée de Main",
+      "description": "Nos pièces de rechange d’origine garantissent la fiabilité et la durabilité de vos équipements Fennec. Nous assurons une disponibilité rapide et un service compétitif pour répondre à vos besoins."
+    }
+  },
+  "leasing": {
+    "title": "Location",
+    "description": "Renseignez-vous sur nos options de location d'équipement.",
+    "contact": {
+      "title": "Contactez-nous pour un plan sur mesure",
+      "description": "Parlez à l’un de nos experts pour découvrir les options de leasing et de financement qui répondent à vos besoins. Ensemble, nous trouverons la solution idéale pour équiper vos projets avec efficacité et sérénité."
+    },
+    "advantages": {
+      "title": "Avantages Location",
+      "stats": [
+        "Paiements abordables",
+        "Flexibilité des échéances",
+        "Solutions personnalisées"
+      ]
+    },
+    "hero": {
+      "title": "Location et financement",
+      "description": "Équipements de qualité, disponibles immédiatement"
+    },
+    "financement": {
+      "label": "Location et Financement",
+      "title": "Équipez-vous dès aujourd’hui",
+      "description": "Grâce à nos solutions de location et de financement, vous bénéficiez d’une flexibilité optimale pour équiper vos chantiers tout en préservant vos liquidités pour d’autres priorités.",
+      "button": "Voir Plus"
+    }
+  }
+}

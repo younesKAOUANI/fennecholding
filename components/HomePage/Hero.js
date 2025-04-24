@@ -1,51 +1,56 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-const images = [
-  { src: "https://placehold.co/1080x600", alt: "Placeholder Image 1" },
-  { src: "https://placehold.co/1080x500", alt: "Placeholder Image 2" },
-  { src: "https://placehold.co/1080x700", alt: "Placeholder Image 3" },
-  { src: "https://placehold.co/1080x800", alt: "Placeholder Image 4" },
-  { src: "https://placehold.co/1080x500", alt: "Placeholder Image 5" },
-];
+import Image from "next/image";
+import React from "react";
+import { Link } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
-
-
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const t = useTranslations("hero");
+  const placeholderImages = [
+    "https://placehold.co/124x124.png",
+    "https://placehold.co/124x124.png",
+    "https://placehold.co/124x124.png",
+    "https://placehold.co/124x124.png",
+    "https://placehold.co/124x124.png",
+    "https://placehold.co/124x124.png",
+  ];
 
   return (
-    <section className="relative w-full h-[600px] overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={images[current].src}
-          src={images[current].src}
-          alt={images[current].alt}
-          className="absolute w-full h-full object-cover"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-        />
-      </AnimatePresence>
+    <section className="relative w-full min-h-screen bg-gray-50 overflow-hidden border-b-4 border-primary/60">
+      <div className="container mx-auto !pt-32 px-4 py-12 md:py-16 lg:py-20 flex items-center justify-center h-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="flex flex-col gap-6" data-aos="fade-right" data-aos-duration="800">
+            <h1 className="text-xl md:text-2xl font-semibold text-primary">Fennec Holding</h1>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              {t("title")}
+            </h2>
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4">
+              {placeholderImages.map((src, index) => (
+                <Image
+                  key={index}
+                  src={src}
+                  alt={`Placeholder ${index + 1}`}
+                  width={100}
+                  height={100}
+                  className="w-full h-auto rounded-md hover:scale-105 transition-transform duration-300"
+                />
+              ))}
+            </div>
+            <div className="text-base sm:text-lg text-gray-600 pt-4 border-t-2 border-gray-800">
+              <p>{t("subtitle")}</p>
+            </div>
+          </div>
+          <div className="flex justify-center" data-aos="fade-left" data-aos-duration="800">
+            <Image
+              src="/images/main-hero.png"
+              alt="Hero Image"
+              width={500}
+              height={500}
+              className="rounded-sm w-full max-w-md md:max-w-lg h-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.25)]"
+            />
 
-
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`w-2 h-2 rounded-full transition-all ${index === current ? "bg-primary" : "bg-gray-400"
-              }`}
-          />
-        ))}
+          </div>
+        </div>
       </div>
     </section>
   );

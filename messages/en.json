@@ -1,0 +1,181 @@
+{
+  "header": {
+    "home": "Home",
+    "products": "Products",
+    "services": "Services",
+    "leasing": "Leasing",
+    "about": "About",
+    "search_placeholder": "Search..."
+  },
+  "footer": {
+    "title": "We Are Here for You",
+    "phone_label": "Phone Number:",
+    "phone": "+225 07 65 34 56 78",
+    "email_label": "Email:",
+    "email": "contact@fennecholdings.dz",
+    "address_label": "Address:",
+    "address": "R.N-N°5 - Entrée De Hraicha Amar - Ain Smara (w) Constantine, Constantine 25140",
+    "copyright": "© 2025 Fennecholdings. All rights reserved."
+  },
+  "hero": {
+    "title": "Your Construction Partner",
+    "subtitle": "The perfect partner for your projects"
+  },
+  "trusted": {
+    "partners_label": "Our Partners and Clients",
+    "title": "They Trusted Us"
+  },
+  "about": {
+    "title": "About",
+    "description": "Learn more about Fennec Holding.",
+    "us": {
+      "label": "Who We Are?",
+      "title": "The Perfect Partner for Your Project",
+      "description1": "We are more than a supplier: we are your trusted partner in driving your construction projects to success.",
+      "description2": "Specialized in concrete equipment, we offer complete solutions, from research and development to manufacturing, with local after-sales service.",
+      "description3": "Our machines, designed to the strictest European standards, guarantee quality, performance, and safety.",
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms"
+      ]
+    },
+    "mission": {
+      "label": "Our Mission",
+      "title": "Building the Future, Together",
+      "description": "Our mission is to provide innovative and high-quality construction solutions while empowering our team to create lasting value.",
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms"
+      ]
+    },
+    "advantages": {
+      "stats": [
+        {
+          "label": "Integrity",
+          "text": "We act with honesty and transparency, honoring every commitment made to our clients and partners."
+        },
+        {
+          "label": "Innovation",
+          "text": "We evolve with the times, constantly seeking modern solutions to address tomorrow’s challenges."
+        },
+        {
+          "label": "Excellence",
+          "text": "We aim for perfection in the quality of our products and services, without compromise."
+        },
+        {
+          "label": "Collaboration",
+          "text": "We believe in the power of teamwork, sharing success with our clients and partners."
+        }
+      ]
+    },
+    "dna": {
+      "label": "Who We Are?",
+      "title": "Our DNA",
+      "description1": "We are more than a supplier: we are your trusted partner in driving your construction projects to success.",
+      "description2": "Specialized in concrete equipment, we offer complete solutions, from research and development to manufacturing, with local after-sales service.",
+      "description3": "Our machines, designed to the strictest European standards, guarantee quality, performance, and safety.",
+      "button": "See More"
+    },
+    "solutions": {
+      "title": "Cutting-Edge Solutions",
+      "tabs": [
+        {
+          "title": "Research and Development",
+          "description": "While creativity must flourish without constraints, producing a finished product requires rigor and discipline. That’s why we’ve strengthened our Research & Development department and invested in cutting-edge tools to ensure the viability of our ideas. Our unique European Testing Center embodies this commitment, allowing us to subject each component to rigorous testing."
+        },
+        {
+          "title": "Smartronic™",
+          "description": "FENNEC’s Smartronic™ system is an electronic breakthrough that enhances the performance and safety of truck-mounted pumps and mixer pumps. It simplifies machine management with an intuitive interface and centralizes critical data for real-time monitoring of main components. Smartronic™ autonomously regulates the pumping unit, pressure, and engine speed, ensuring optimal efficiency and reliability."
+        },
+        {
+          "title": "Carbotech",
+          "description": "Since 2010, FENNEC has equipped its high-end truck-mounted pumps and mixer pumps with carbon fiber. This composite material, lighter than steel and easily repairable, offers remarkable performance. By applying it to the arm’s terminal sections, we improve machine stability while reducing overall weight."
+        }
+      ]
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "Explore our range of construction products.",
+    "featured": {
+      "title": "Explore All Fennec Products",
+      "button": "See More"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "description": "Discover our construction and consulting services.",
+    "stats": {
+      "title": "A complete solution for your construction projects",
+      "stats": [
+        "Installation",
+        "Commission",
+        "Service",
+        "Spare Parts"
+      ]
+    },
+    "replacement_advantages": {
+      "title": "Fennec Advantages",
+      "stats": [
+        "Parts Warranty",
+        "Express Delivery",
+        "Availability",
+        "Competitive Prices"
+      ]
+    },
+    "after_sale": {
+      "label": "After-Sale Service",
+      "title": "A Team of Experts at Your Service",
+      "description": "Our commitment doesn’t end with equipment delivery. We offer responsive and professional assistance and original spare parts to ensure the performance and longevity of your machines.",
+      "button": "See More"
+    },
+    "hero": {
+      "title": "After-Sale Services",
+      "stats": [
+        "Assistance",
+        "Spare Parts"
+      ]
+    },
+    "after_sale_advantages": {
+      "title": "Fennec Advantages",
+      "stats": [
+        "Immediate Responsiveness",
+        "On-Site Visits",
+        "Maintenance",
+        "Qualified Experts",
+        "Advanced Technical Support"
+      ]
+    },
+    "replacement_pieces": {
+      "label": "Spare Parts",
+      "title": "Original Parts, Within Reach",
+      "description": "Our original spare parts guarantee the reliability and durability of your Fennec equipment. We ensure fast availability and competitive service to meet your needs."
+    }
+  },
+  "leasing": {
+    "title": "Leasing",
+    "description": "Find out about our equipment leasing options.",
+    "contact": {
+      "title": "Contact Us for a Tailored Plan",
+      "description": "Speak to one of our experts to explore leasing and financing options that meet your needs. Together, we’ll find the ideal solution to equip your projects efficiently and confidently."
+    },
+    "advantages": {
+      "title": "Leasing Advantages",
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms",
+        "Customized Solutions"
+      ]
+    },
+    "hero": {
+      "title": "Leasing and Financing",
+      "description": "High-quality equipment, available immediately"
+    },
+    "financement": {
+      "label": "Leasing and Financing",
+      "title": "Equip Yourself Today",
+      "description": "With our leasing and financing solutions, you gain optimal flexibility to equip your sites while preserving liquidity for other priorities.",
+      "button": "See More"
+    }
+  }
+}

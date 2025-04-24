@@ -7,85 +7,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id             String      @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  img            String[] // MongoDB doesn't enforce foreign keys, store image URLs directly
-  specification  String?
-  configurations String?
-  categoryId     String
-  category       Category?   @relation(fields: [categoryId], references: [id])
-  highlights     Highlight[]
-  datasheet      String?
-  brochure       String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-}
-
-model Highlight {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String
-  productId   String
-  Product     Product @relation(fields: [productId], references: [id])
-}
-
-model Image {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  url       String
-  productId String
-}
-
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String    @unique
-  img      String
-  products String[] // Store product IDs instead of a relational array
-  Product  Product[]
+  id           String              @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime            @default(now())
+  img          String?
+  translations CategoryTranslation[]
+  products     Product[]
+}
+
+model CategoryTranslation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
+  locale     String
+  name       String
+  @@unique([categoryId, locale])
+}
+
+model Product {
+  id           String              @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId   String              @db.ObjectId
+  category     Category            @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime            @default(now())
+  images       String[]
+  datasheet     String?
+  brochure     String?
+  translations ProductTranslation[]
+}
+
+model ProductTranslation {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId      String  @db.ObjectId
+  product        Product @relation(fields: [productId], references: [id])
+  locale         String
+  name           String
+  specifications String
+  configurations String
+  highlights     String
+  @@unique([productId, locale])
 }
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  password      String    // Hashed password stored here
   emailVerified DateTime?
   image         String?
-  role          String    @default("user") // Can be "admin" or "user"
-  createdAt     DateTime  @default(now())
+  password      String?
   accounts      Account[]
   sessions      Session[]
+  createdAt     DateTime  @default(now())
 }
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
+  userId            String  @db.ObjectId
+  user              User    @relation(fields: [userId], references: [id])
   type              String
   provider          String
   providerAccountId String
   refresh_token     String?
   access_token      String?
   expires_at        Int?
-  id_token          String?
-  scope             String?
-  session_state     String?
   token_type        String?
-  User              User    @relation(fields: [userId], references: [id])
+  scope             String?
+  id_token          String?
+  session_state     String?
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id])
   expires      DateTime
-  User         User     @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier  String
-  token       String   @unique
-  expires     DateTime
-
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
   @@unique([identifier, token])
 }

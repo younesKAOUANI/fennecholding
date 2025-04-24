@@ -1,24 +1,30 @@
-import Banner from '@/components/main/Banner'
-import InfoSection from '@/components/main/InfoSection'
+
+import AfterSaleAdvantages from '@/components/ServicePage/AfterSaleAdvantages'
+import AfterSaleServices from '@/components/ServicePage/AfterSaleServices'
+import ReplacementAdvantages from '@/components/ServicePage/ReplacementAdvantages'
+import ReplacementPieces from '@/components/ServicePage/ReplacementPieces'
+import ServiceHero from '@/components/ServicePage/ServiceHero'
+import Image from 'next/image'
 import React from 'react'
+
+const advantages = [
+    "Réactivité immédiate",
+    "Visites sur site",
+    "Maintenance",
+    "Experts qualifiés",
+    "Support technique avancé"
+];
 
 export default function index() {
     return (
-        <div className='pt-20'>
-            <Banner title={'Services Aprés Ventes'} />
-            <InfoSection title={'Pieces Originales'}
-                description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus.'}
-                img={'https://placehold.co/500x400.png'}
-                alt={'DNA'}
-                imgOrder={'order-1'}
-            />
-            <InfoSection title={'Assitance'}
-                description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus.'}
-                img={'https://placehold.co/500x400.png'}
-                alt={'DNA'}
-                imgOrder={'order-0'}
-                bg={true}
-            />
-        </div>
+        <main className='pt-6 relative bg-gray-50'>
+            <Image src='/services-page-image.png' alt='Our DNA' width={300} height={400} className='absolute top-0 right-0' />
+            <ServiceHero />
+            <AfterSaleServices />
+            <AfterSaleAdvantages />
+            <ReplacementPieces />
+            <ReplacementAdvantages />
+        </main >
     )
 }
+

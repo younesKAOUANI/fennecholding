@@ -1,23 +1,22 @@
-import Map from '@/components/AboutPage/Map'
-import Stats from '@/components/AboutPage/Stats'
-import Values from '@/components/AboutPage/Values'
+import AboutUsSection from '@/components/AboutPage/AboutUsSection'
+import AdvantagesFennec from '@/components/AboutPage/AdvantagesFennec'
+import OurMission from '@/components/AboutPage/OurMission'
 import TheyTrustedUs from '@/components/HomePage/TheyTrustedUs'
-import Banner from '@/components/main/Banner'
-import InfoSection from '@/components/main/InfoSection'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import React from 'react'
 
 export default function index() {
+      const t = useTranslations('about');
     return (
-        <div className='pt-20'>
-            <Banner title={'A Propos'} override={true} />
-            <InfoSection title={'Le Partenaire Parfait pour vos Projets'}
-                description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus.'}
-                img={'https://placehold.co/500x400.png'}
-                alt={'DNA'}
-                imgOrder={'order-1'}
-            />
-            <Stats />
-            <Values />
+        <div className='pt-20 bg-gray-50 relative'>
+            <Image src={'/about-us-img.png'} alt='about' width={350} height={500} className='absolute ltr:right-0 top-0 rtl:left-0' />
+            <div className='section !pb-4'>
+                <h1 className='font-bold text-7xl uppercase'>{t('title')}</h1>
+            </div>
+            <AboutUsSection />
+            <OurMission />
+            <AdvantagesFennec />
             <TheyTrustedUs />
         </div>
     )

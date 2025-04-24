@@ -4,16 +4,68 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 
 export const categoriesTableView = (fetchCases) => [
-  { Header: "Id", Cell: ({ row }) => <div>{row.index + 1}</div> },
-  { Header: "Nom", accessor: "name" },
-  { Header: "Image", accessor: "img", Cell: ({ row }) => <div><Image height={200} width={200} src={row.original.img} className="rounded-md" alt={`Category ${row.original.name} Image`} /></div> },
   {
-    Header: "",
+    Header: "ID",
+    Cell: ({ row }) => <div>{row.index + 1}</div>,
+  },
+  {
+    Header: "Image",
+    accessor: "img",
+    Cell: ({ row }) =>
+      row.original.img ? (
+        <div>
+          <Image
+            height={100}
+            width={100}
+            src={row.original.img}
+            className="rounded-md object-cover"
+            alt="Image de la catégorie"
+          />
+        </div>
+      ) : (
+        <div>Aucune image</div>
+      ),
+  },
+  {
+    Header: "Nom (Anglais)",
+    accessor: "translations",
+    id: "name_en",
+    Cell: ({ row }) => {
+      const enTranslation = row.original.translations.find((t) => t.locale === "en");
+      return enTranslation ? enTranslation.name : "N/A";
+    },
+  },
+  {
+    Header: "Nom (Français)",
+    accessor: "translations",
+    id: "name_fr",
+    Cell: ({ row }) => {
+      const frTranslation = row.original.translations.find((t) => t.locale === "fr");
+      return frTranslation ? frTranslation.name : "N/A";
+    },
+  },
+  {
+    Header: "Nom (Arabe)",
+    accessor: "translations",
+    id: "name_ar",
+    Cell: ({ row }) => {
+      const arTranslation = row.original.translations.find((t) => t.locale === "ar");
+      return arTranslation ? <span dir="rtl">{arTranslation.name}</span> : "N/A";
+    },
+  },
+  {
+    Header: "Actions",
     accessor: "actions",
     disableSortBy: true,
     disableGlobalFilter: true,
     Cell: ({ row }) => (
-      <div className="w-auto my-2 flex gap-4">
+      <div className="flex gap-4">
+        {/* <Link
+          href={`/admin/categories/edit/${row.original.id}`}
+          className="bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 flex items-center justify-center"
+        >
+          <CiEdit className="text-2xl" />
+        </Link> */}
         <DeleteButton id={row.original.id} fetchCases={fetchCases} />
       </div>
     ),
@@ -22,27 +74,36 @@ export const categoriesTableView = (fetchCases) => [
 
 const DeleteButton = ({ id, fetchCases }) => {
   const handleDelete = async () => {
-    try {
-      // const response = await axios.delete(API_ENDPOINTS.DELETE_CASE(id));
+    if (!confirm("Voulez-vous supprimer cette catégorie ?")) return;
 
-      if (response.status === 200) {
-        console.log('Case deleted successfully');
-        fetchCases(); // Re-fetch the cases after deletion
-      } else {
-        console.error('Error deleting case', response.data);
+    try {
+      const response = await fetch(`/api/categories?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Échec de la suppression de la catégorie");
       }
+
+      console.log("Catégorie supprimée avec succès");
+      fetchCases(); // Re-fetch the categories after deletion
     } catch (error) {
-      console.error('Error deleting case', error);
+      console.error("Erreur lors de la suppression de la catégorie:", error);
+      alert(`Erreur : ${error.message}`);
     }
   };
 
   return (
-    <Link href={'#'}
+    <button
       onClick={handleDelete}
-      className="bg-red-500 text-white shadow-md hover:scale-95 hover:shadow-md rounded-full p-2 flex items-center justify-center"
+      className="bg-red-500 text-white shadow-md hover:scale-95 hover:shadow-sm rounded-full p-2 flex items-center justify-center"
     >
-      <MdDeleteOutline className="text-2xl t" />
-    </Link>
+      <MdDeleteOutline className="text-2xl" />
+    </button>
   );
 };
 
