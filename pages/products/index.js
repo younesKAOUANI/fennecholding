@@ -204,7 +204,7 @@ const CategorySection = ({ category }) => {
                       className="mx-auto text-md font-medium px-4 py-2 hover:bg-primary hover:text-white rounded-full flex items-center gap-4"
                     >
                       {product.name}
-                      <LuCircleArrowRight className="text-2xl" />
+                      <LuCircleArrowRight className="text-2xl rtl:rotate-180" />
                     </Link>
                   </div>
                 </div>

@@ -4,12 +4,10 @@ const mapLink = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5504.7819
 
 export default function Map() {
   return (
-    <div className='order-5 container mx-auto rounded-lg overflow-hidden h-[400px] my-4'>
+    <div className='order-5 container mx-auto rounded-lg overflow-hidden h-[300px] sm:h-[400px] my-4' data-aos="fade-up">
       <iframe
         className='w-full h-full'
         src={mapLink}
-        width="600"
-        height="450"
         style={{ border: 0 }}
         allowFullScreen=""
         loading="lazy"

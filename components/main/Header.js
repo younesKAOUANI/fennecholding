@@ -24,7 +24,9 @@ export default function Header() {
         <button className="md:hidden text-3xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <FiMenu />
         </button>
-        <LanguageSwitcher />
+        <div className='hidden md:block'>
+          <LanguageSwitcher />
+        </div>
       </div>
       <AnimatePresence>
         {isMenuOpen && <MainMenuMobile onClose={() => setIsMenuOpen(false)} />}
@@ -168,9 +170,8 @@ function LanguageSwitcher() {
         <button
           key={loc}
           onClick={() => handleChange(loc)}
-          className={`w-7 h-7 rounded-full transition-transform ${
-            locale === loc ? "ring-2 ring-primary scale-110" : "opacity-70 hover:opacity-100"
-          }`}
+          className={`w-7 h-7 rounded-full transition-transform ${locale === loc ? "ring-2 ring-primary scale-110" : "opacity-70 hover:opacity-100"
+            }`}
           aria-label={`Switch to ${loc}`}
         >
           <Image

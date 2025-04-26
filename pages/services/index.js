@@ -28,7 +28,7 @@ export default function index() {
             <AfterSaleServices />
             <AfterSaleAdvantages />
             <ReplacementPieces />
-            <ReplacementAdvantages />
+            {/* <ReplacementAdvantages /> */}
         </main >
     )
 }

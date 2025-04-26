@@ -15,7 +15,7 @@
     "email": "contact@fennecholdings.dz",
     "address_label": "Address:",
     "address": "R.N-N°5 - Entrée De Hraicha Amar - Ain Smara (w) Constantine, Constantine 25140",
-    "copyright": "© 2025 Fennecholdings. All rights reserved."
+    "copyright": "© 2025 Fennecholdings. Tous droits réservés."
   },
   "hero": {
     "title": "Your Construction Partner",
@@ -34,13 +34,19 @@
       "description1": "We are more than a supplier: we are your trusted partner in driving your construction projects to success.",
       "description2": "Specialized in concrete equipment, we offer complete solutions, from research and development to manufacturing, with local after-sales service.",
       "description3": "Our machines, designed to the strictest European standards, guarantee quality, performance, and safety.",
-      "stats": ["Affordable Payments", "Flexible Terms"]
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms"
+      ]
     },
     "mission": {
       "label": "Our Mission",
       "title": "Building the Future, Together",
       "description": "Our mission is to provide innovative and high-quality construction solutions while empowering our team to create lasting value.",
-      "stats": ["Affordable Payments", "Flexible Terms"]
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms"
+      ]
     },
     "advantages": {
       "stats": [
@@ -101,7 +107,12 @@
     "description": "Discover our construction and consulting services.",
     "stats": {
       "title": "A complete solution for your construction projects",
-      "stats": ["Installation", "Commission", "Service", "Spare Parts"]
+      "stats": [
+        "Installation",
+        "Commission",
+        "Service",
+        "Spare Parts"
+      ]
     },
     "replacement_advantages": {
       "title": "Fennec Advantages",
@@ -120,7 +131,10 @@
     },
     "hero": {
       "title": "After-Sale Services",
-      "stats": ["Assistance", "Spare Parts"]
+      "stats": [
+        "Assistance",
+        "Spare Parts"
+      ]
     },
     "after_sale_advantages": {
       "title": "Fennec Advantages",
@@ -147,7 +161,11 @@
     },
     "advantages": {
       "title": "Leasing Advantages",
-      "stats": ["Affordable Payments", "Flexible Terms", "Customized Solutions"]
+      "stats": [
+        "Affordable Payments",
+        "Flexible Terms",
+        "Customized Solutions"
+      ]
     },
     "hero": {
       "title": "Leasing and Financing",

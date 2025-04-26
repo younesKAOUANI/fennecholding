@@ -16,7 +16,7 @@ export default function index() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Image src={'/about-us-img.png'} alt='about' width={350} height={500} className='absolute ltr:right-0 top-0 rtl:left-0' />
-            <div className='section !pb-4'>
+            <div className='section !pb-4 relative z-10'>
                 <h1 className='font-bold text-7xl uppercase'>{t('title')}</h1>
             </div>
             <AboutUsSection />

@@ -11,29 +11,35 @@ export default function AdvantagesFennec() {
     {
       label: t('stats.0.label'),
       text: t('stats.0.text'),
-      icon: <IoCheckmarkDoneOutline size={32} className="mb-4 text-primary" />
+      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
     },
     {
       label: t('stats.1.label'),
       text: t('stats.1.text'),
-      icon: <IoCheckmarkDoneOutline size={32} className="mb-4 text-primary" />
+      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
     },
     {
       label: t('stats.2.label'),
       text: t('stats.2.text'),
-      icon: <IoCheckmarkDoneOutline size={32} className="mb-4 text-primary" />
+      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
     },
     {
       label: t('stats.3.label'),
       text: t('stats.3.text'),
-      icon: <IoCheckmarkDoneOutline size={32} className="mb-4 text-primary" />
+      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
     }
   ];
 
   return (
     <section className='relative'>
-      <Image src={'/advantagesfennec-image.png'} alt='about' width={500} height={800} className='absolute right-0 -top-16' />
-      <div className='section grid md:grid-cols-4 gap-8 items-center'>
+      <Image 
+        src={'/advantagesfennec-image.png'} 
+        alt='about' 
+        width={400} 
+        height={600} 
+        className='absolute hidden md:block right-0 -top-16' 
+      />
+      <div className='section grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 items-center px-4 py-12 md:px-6 md:py-16'>
         {stats.map((stat, index) => (
           <div
             key={index}
@@ -42,8 +48,8 @@ export default function AdvantagesFennec() {
             data-aos-delay={index * 100}
           >
             {stat.icon}
-            <p className="text-2xl mb-4 font-bold">{stat.label}</p>
-            <p className="text-lg mb-1">{stat.text}</p>
+            <p className="text-xl md:text-2xl mb-4 font-bold">{stat.label}</p>
+            <p className="text-base md:text-lg mb-1">{stat.text}</p>
           </div>
         ))}
       </div>

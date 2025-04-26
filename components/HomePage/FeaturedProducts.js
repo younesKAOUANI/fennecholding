@@ -16,9 +16,15 @@ export default function FeaturedProducts() {
 
   return (
     <section className='relative overflow-hidden'>
-      <Image src='/featured-image.png' alt='' width={300} height={400} className='absolute right-0' />
-      <div className='section !pt-0'>
-        <div className='grid md:grid-cols-4 grid-cols-2 md:gap-8 gap-2 mb-6'>
+      <Image 
+        src='/featured-image.png' 
+        alt='' 
+        width={300} 
+        height={400} 
+        className='absolute hidden md:block right-0' 
+      />
+      <div className='section pt-0 md:pt-4 px-4 py-12 md:px-6 md:py-16'>
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-6'>
           {products.map((product, index) => (
             <div
               key={index}
@@ -36,24 +42,24 @@ export default function FeaturedProducts() {
               <div className="flex items-center p-4">
                 <Link
                   href={product.link}
-                  className="mx-auto md:text-xl text-xs font-medium px-4 py-2 hover:bg-primary hover:text-white rounded-full flex items-center gap-4"
+                  className="mx-auto text-sm md:text-xl font-medium px-4 py-2 hover:bg-primary hover:text-white rounded-full flex items-center gap-4"
                 >
                   {product.name}
-                  <LuCircleArrowRight className='text-2xl rtl:rotate-180' />
+                  <LuCircleArrowRight className='text-xl md:text-2xl rtl:rotate-180' />
                 </Link>
               </div>
             </div>
           ))}
         </div>
-        <div className='flex justify-between items-center mt-12 relative z-10'>
-          <h2 className='text-5xl font-semibold'>{t('title')}</h2>
+        <div className='flex flex-col md:flex-row justify-between items-center mt-12 relative z-10 gap-4'>
+          <h2 className='text-2xl md:text-5xl  font-semibold' data-aos="fade-right">{t('title')}</h2>
           <Link
             href={'/'}
             data-aos="fade-in"
-            className='text-xl font-medium px-4 py-2 bg-primary text-white rounded-full flex items-center justify-center gap-4 hover:scale-95'
+            className='text-lg md:text-xl font-medium px-4 py-2 bg-primary text-white rounded-full flex items-center justify-center gap-4 hover:scale-95'
           >
             <span>{t('button')}</span>
-            <LuCircleArrowRight className='text-3xl rtl:rotate-180' />
+            <LuCircleArrowRight className='text-2xl md:text-3xl rtl:rotate-180' />
           </Link>
         </div>
       </div>
