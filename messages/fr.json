@@ -34,19 +34,13 @@
       "description1": "Nous sommes bien plus qu’un fournisseur : nous sommes votre partenaire de confiance pour mener vos projets de construction à la réussite.",
       "description2": "Spécialisés dans les équipements pour le béton, nous offrons des solutions complètes, de la recherche et développement à la fabrication, en passant par un service après-vente de proximité.",
       "description3": "Nos machines, conçues selon les normes européennes les plus strictes, garantissent qualité, performance et sécurité.",
-      "stats": [
-        "Paiements abordables",
-        "Flexibilité des échéances"
-      ]
+      "stats": ["Paiements abordables", "Flexibilité des échéances"]
     },
     "mission": {
       "label": "Notre Mission",
       "title": "Construire l’avenir, ensemble",
       "description": "Notre Mission est de fournir des solutions de construction innovantes et de qualité, tout en valorisant le potentiel de notre équipe pour créer une valeur durable.",
-      "stats": [
-        "Paiements abordables",
-        "Flexibilité des échéances"
-      ]
+      "stats": ["Paiements abordables", "Flexibilité des échéances"]
     },
     "advantages": {
       "stats": [
@@ -131,10 +125,7 @@
     },
     "hero": {
       "title": "Services Après-Vente",
-      "stats": [
-        "Assistance",
-        "Pièces de Rechange"
-      ]
+      "stats": ["Assistance", "Pièces de Rechange"]
     },
     "after_sale_advantages": {
       "title": "Avantages Fennec",
@@ -177,5 +168,15 @@
       "description": "Grâce à nos solutions de location et de financement, vous bénéficiez d’une flexibilité optimale pour équiper vos chantiers tout en préservant vos liquidités pour d’autres priorités.",
       "button": "Voir Plus"
     }
+  },
+  "Index": {
+    "bannerTitle": "Nos Produits",
+    "filterTitle": "Filtrer par Catégorie",
+    "resetFilter": "Réinitialiser",
+    "noCategories": "Aucune catégorie disponible.",
+    "noProducts": "Aucun produit disponible dans cette catégorie.",
+    "fetchError": "Échec de la récupération des catégories : {status}",
+    "invalidResponse": "Attendu un tableau de catégories, reçu : {data}",
+    "errorLoading": "Erreur lors du chargement des catégories : {error}"
   }
 }

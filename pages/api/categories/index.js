@@ -13,7 +13,10 @@ export default async function handler(req, res) {
           // GET by ID
           const category = await prisma.category.findUnique({
             where: { id },
-            include: { translations: true },
+            include: {
+              translations: true,
+              products: { include: { translations: true } }, // Include products with translations
+            },
           });
           if (!category) {
             return res.status(404).json({ message: 'Category not found' });
@@ -22,7 +25,10 @@ export default async function handler(req, res) {
         } else {
           // GET all categories
           const categories = await prisma.category.findMany({
-            include: { translations: true },
+            include: {
+              translations: true,
+              products: { include: { translations: true } }, // Include products with translations
+            },
           });
           return res.status(200).json(categories);
         }
