@@ -2,14 +2,15 @@
 
 import Banner from '@/components/main/Banner';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { LuCircleArrowRight } from 'react-icons/lu';
 import Slider from 'react-slick';
 
-export default function Index({ locale = 'en' }) {
-  const t = useTranslations('Index'); // Access translations from messages/[locale].json
+export default function Index() {
+  const locale = useLocale(); // Dynamically get the current locale
+  const t = useTranslations('Index'); // Access translations
   const [allCategories, setAllCategories] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState([]);
   const [error, setError] = useState(null);
@@ -28,39 +29,43 @@ export default function Index({ locale = 'en' }) {
         throw new Error(t('fetchError', { status: response.statusText }));
       }
       const newData = await response.json();
-      console.log('API Response from /api/categories:', newData); // Debug log
+      console.log('API Response from /api/categories:', newData);
 
-      // Validate response
       if (!Array.isArray(newData)) {
         throw new Error(
           t('invalidResponse', { data: JSON.stringify(newData) })
         );
       }
 
-      // Map categories to include translated fields
       const translatedCategories = newData.map((category) => {
-        console.log('Category Data:', category); // Debug log
+        console.log('Current locale:', locale);
+        console.log('Category translations:', category.translations);
         const categoryTranslation =
           category.translations?.find((t) => t?.locale === locale) ||
           category.translations?.[0] ||
           {};
+        console.log('Selected category translation:', categoryTranslation);
         return {
           ...category,
-          name: categoryTranslation.name || 'Unnamed Category',
+          name: categoryTranslation.name || t('unnamedCategory'),
           products: (category.products || []).map((product) => {
             const productTranslation =
               product.translations?.find((t) => t?.locale === locale) ||
               product.translations?.[0] ||
               {};
-            console.log('Product ID:', product.id, 'Translation:', productTranslation); // Debug translation
+            console.log(
+              'Selected product translation for locale',
+              locale,
+              ':',
+              productTranslation
+            );
             return {
               ...product,
-              name: productTranslation.name || 'Unnamed Product',
+              name: productTranslation.name || t('unnamedProduct'),
             };
           }),
         };
       });
-      console.log('Translated Categories:', translatedCategories); // Debug log
       setAllCategories(translatedCategories);
       setVisibleCategories(translatedCategories);
       setError(null);
@@ -75,19 +80,18 @@ export default function Index({ locale = 'en' }) {
   };
 
   useEffect(() => {
+    console.log('Locale changed to:', locale);
     fetchCategories();
-  }, [locale]); // Re-fetch when locale changes
+  }, [locale]);
 
   const handleSelectCategory = (selectedCategory) => {
-    console.log('Selected Category:', selectedCategory); // Debug log
     if (selectedCategory) {
       setVisibleCategories(
         allCategories.filter((cat) => cat.id === selectedCategory.id)
       );
     } else {
-      setVisibleCategories(allCategories); // Show all categories when no filter
+      setVisibleCategories(allCategories);
     }
-    console.log('Visible Categories:', visibleCategories); // Debug log
   };
 
   return (
@@ -100,7 +104,6 @@ export default function Index({ locale = 'en' }) {
         <Filter
           categories={allCategories}
           onSelectCategory={handleSelectCategory}
-          locale={locale}
         />
         <div className="col-span-3">
           {error ? (
@@ -113,16 +116,10 @@ export default function Index({ locale = 'en' }) {
             ))
           ) : visibleCategories.length > 0 ? (
             visibleCategories.map((category) => (
-              <CategorySection
-                key={category.id}
-                category={category}
-                locale={locale}
-              />
+              <CategorySection key={category.id} category={category} />
             ))
           ) : (
-            <div className="text-center py-10">
-              {t('noCategories')}
-            </div>
+            <div className="text-center py-10">{t('noCategories')}</div>
           )}
         </div>
       </div>
@@ -130,7 +127,7 @@ export default function Index({ locale = 'en' }) {
   );
 }
 
-const CategorySection = ({ category, locale }) => {
+const CategorySection = ({ category }) => {
   const t = useTranslations('Index');
   const slidesToShowDesktop = 4;
   const settings = {
@@ -175,9 +172,7 @@ const CategorySection = ({ category, locale }) => {
 
   return (
     <div className="bg-white mb-8">
-      <h2 className="text-xl font-medium px-4 py-2 mb-6">
-        {category.name}
-      </h2>
+      <h2 className="text-xl font-medium px-4 py-2 mb-6">{category.name}</h2>
       {products.length > 0 ? (
         <Slider {...settings}>
           {slides.map((product, index) => {
@@ -213,15 +208,13 @@ const CategorySection = ({ category, locale }) => {
           })}
         </Slider>
       ) : (
-        <div className="text-center py-4">
-          {t('noProducts')}
-        </div>
+        <div className="text-center py-4">{t('noProducts')}</div>
       )}
     </div>
   );
 };
 
-const Filter = ({ categories, onSelectCategory, locale }) => {
+const Filter = ({ categories, onSelectCategory }) => {
   const t = useTranslations('Index');
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -259,7 +252,7 @@ const Filter = ({ categories, onSelectCategory, locale }) => {
               key={`skeleton-${index}`}
               className="py-2 px-4 mb-2 rounded bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
             >
-              &nbsp;
+               
             </li>
           ))
         )}

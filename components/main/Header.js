@@ -173,7 +173,9 @@ function LanguageSwitcher() {
           }`}
           aria-label={`Switch to ${loc}`}
         >
-          <img
+          <Image
+            width={28}
+            height={28}
             src={flags[loc]}
             alt={`Flag of ${loc}`}
             className="w-full h-full object-cover rounded-full border border-black"
