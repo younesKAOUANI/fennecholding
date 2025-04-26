@@ -143,16 +143,19 @@ function Search() {
   );
 }
 
-
 function LanguageSwitcher() {
   const router = useRouter();
   const { locale } = router;
 
   const handleChange = (newLocale) => {
-    router.push(router.pathname, router.pathname, { locale: newLocale });
+    router.push(
+      { pathname: router.pathname, query: router.query },
+      undefined,
+      { locale: newLocale }
+    );
   };
 
-  // Flag images (make sure to adjust paths to where your flags are stored)
+  // Flag images (adjust paths to where your flags are stored)
   const flags = {
     en: "/flags/en.png", // English flag
     fr: "/flags/fr.png", // French flag
@@ -165,8 +168,9 @@ function LanguageSwitcher() {
         <button
           key={loc}
           onClick={() => handleChange(loc)}
-          className={`w-7 h-7 rounded-full transition-transform ${locale === loc ? "ring-2 ring-primary scale-110" : "opacity-70 hover:opacity-100"
-            }`}
+          className={`w-7 h-7 rounded-full transition-transform ${
+            locale === loc ? "ring-2 ring-primary scale-110" : "opacity-70 hover:opacity-100"
+          }`}
           aria-label={`Switch to ${loc}`}
         >
           <img
