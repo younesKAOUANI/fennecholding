@@ -169,5 +169,24 @@
     "fetchError": "Failed to fetch categories: {status}",
     "invalidResponse": "Expected an array of categories, received: {data}",
     "errorLoading": "Error loading categories: {error}"
+  },
+  "ProductPage": {
+    "specificationsTitle": "Specifications",
+    "configurationsTitle": "Configurations",
+    "highlightsTitle": "Highlights",
+    "brochure": "Brochure",
+    "datasheet": "Datasheet",
+    "noHighlights": "No highlights available.",
+    "noHighlightTitle": "No Title",
+    "noHighlightDescription": "No Description",
+    "productImageAlt": "Product Image",
+    "thumbnailAlt": "Thumbnail",
+    "invalidId": "Invalid product ID",
+    "productNotFound": "Product not found",
+    "fetchError": "Failed to fetch product",
+    "invalidData": "Invalid product data",
+    "unnamedProduct": "Unnamed Product",
+    "noSpecifications": "No specifications available",
+    "noConfigurations": "No configurations available"
   }
 }

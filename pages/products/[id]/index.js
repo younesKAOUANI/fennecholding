@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next/link"; // Use next-intl's Link for locale-aware routing
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-// Skeleton Components
+// Skeleton Component
 const ProductPageSkeleton = () => (
   <main className="!pt-20 bg-white">
     <div className="section">
@@ -33,13 +34,14 @@ const ProductPageSkeleton = () => (
           <div className="h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-8"></div>
           <div className="h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
           <div className="h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+
           <div className="flex gap-4 mt-8">
             <div className="h-12 w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
             <div className="h-12 w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
           </div>
         </div>
 
-        {/* Highlights Skeleton */}
+        {/* Highlights */}
         <div>
           <div className="h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
           {Array.from({ length: 3 }).map((_, index) => (
@@ -56,23 +58,22 @@ const ProductPageSkeleton = () => (
 
 // Main ProductPage Component
 export default function ProductPage({ locale = "en" }) {
-  const params = useParams() || {}; // Fallback to empty object
-  const [productId, setProductId] = useState(params.id); // Store initial ID
-  const id = params.id && params.id !== "[id]" ? params.id : productId; // Use stored ID if invalid
+  const t = useTranslations('ProductPage');
+  const params = useParams() || {};
+  const [productId, setProductId] = useState(params.id);
+  const id = params.id && params.id !== "[id]" ? params.id : productId;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Validate ID (MongoDB ObjectId: 24 hex characters)
     const isValidId = id && /^[a-f0-9]{24}$/.test(id);
     if (!id || id === "[id]" || !isValidId) {
-      setError("Invalid product ID");
+      setError(t('invalidId'));
       setLoading(false);
       return;
     }
 
-    // Update productId if valid
     if (params.id && isValidId) {
       setProductId(params.id);
     }
@@ -80,21 +81,21 @@ export default function ProductPage({ locale = "en" }) {
     setLoading(true);
     fetch(`/api/products/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error(res.status === 404 ? "Product not found" : "Failed to fetch product");
+        if (!res.ok) throw new Error(res.status === 404 ? t('productNotFound') : t('fetchError'));
         return res.json();
       })
       .then((data) => {
-        if (!data?.product) throw new Error("Invalid product data");
-        // Map product to include translated fields
+        if (!data?.product) throw new Error(t('invalidData'));
         const translation =
           (data.product.translations || []).find((t) => t?.locale === locale) ||
           data.product.translations?.[0] ||
           {};
+        console.log('Product Translation:', translation);
         setProduct({
           ...data.product,
-          name: translation.name || "Unnamed Product",
-          specifications: translation.specifications || "No specifications available",
-          configurations: translation.configurations || "No configurations available",
+          name: translation.name || t('unnamedProduct'),
+          specifications: translation.specifications || t('noSpecifications'),
+          configurations: translation.configurations || t('noConfigurations'),
           highlights: Array.isArray(translation.highlights) ? translation.highlights : [],
           images: Array.isArray(data.product.images) ? data.product.images : ["/placeholder.png"],
         });
@@ -105,13 +106,14 @@ export default function ProductPage({ locale = "en" }) {
         setProduct(null);
       })
       .finally(() => setLoading(false));
-  }, [id, locale, params.id]); // Include params.id to handle URL changes
+  }, [id, locale, params.id, t]);
 
   if (loading) return <ProductPageSkeleton />;
+
   if (error || !product) {
     return (
       <div className="text-center py-10 text-red-600">
-        {error || "Product not found"}
+        {error || t('productNotFound')}
       </div>
     );
   }
@@ -128,54 +130,51 @@ export default function ProductPage({ locale = "en" }) {
         <div className="grid grid-cols-2 gap-8 items-start mt-12">
           {/* Specifications & Configurations */}
           <div>
-            <p className="font-bold text-2xl mb-4">Spécifications</p>
+            <p className="font-bold text-2xl mb-4">{t('specificationsTitle')}</p>
             <p>{product.specifications}</p>
 
-            <p className="font-bold text-2xl mb-4 mt-8">Configurations</p>
+            <p className="font-bold text-2xl mb-4 mt-8">{t('configurationsTitle')}</p>
             <p>{product.configurations}</p>
 
             <div className="flex gap-4 items-center justify-start mt-8">
               {product.brochure && (
-                <a
+                <Link
                   href={product.brochure}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
                 >
-                  Brochure
-                </a>
+                  {t('brochure')}
+                </Link>
               )}
               {product.datasheet && (
-                <a
+                <Link
                   href={product.datasheet}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
                 >
-                  Fiche Technique
-                </a>
+                  {t('datasheet')}
+                </Link>
               )}
             </div>
           </div>
 
           {/* Highlights Section */}
           <div>
-            <p className="font-semibold text-3xl mb-4">À la une</p>
+            <p className="font-semibold text-3xl mb-4">{t('highlightsTitle')}</p>
             {product.highlights.length > 0 ? (
               product.highlights.map((highlight, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-1 items-start mb-4"
-                >
+                <div key={index} className="flex flex-col gap-1 items-start mb-4">
                   <h3 className="font-bold text-lg flex items-center">
                     <span className="bg-primary mr-2 inline-block rounded-full w-2 h-2"></span>
-                    {highlight.title || "No Title"}
+                    {highlight.title || t('noHighlightTitle')}
                   </h3>
-                  <p>{highlight.description || "No Description"}</p>
+                  <p>{highlight.description || t('noHighlightDescription')}</p>
                 </div>
               ))
             ) : (
-              <p>No highlights available</p>
+              <p>{t('noHighlights')}</p>
             )}
           </div>
         </div>
@@ -186,6 +185,7 @@ export default function ProductPage({ locale = "en" }) {
 
 /* 🔹 Product Gallery Component */
 function ProductGallery({ productData }) {
+  const t = useTranslations('ProductPage');
   const [selectedImage, setSelectedImage] = useState(
     productData.images?.[0] || "/placeholder.png"
   );
@@ -197,7 +197,7 @@ function ProductGallery({ productData }) {
         <div className="w-full h-[650px] rounded-lg overflow-hidden">
           <Image
             src={selectedImage}
-            alt={productData.name || "Product Image"}
+            alt={productData.name || t('productImageAlt')}
             width={1000}
             height={1000}
             className="w-full h-full object-cover"
@@ -218,7 +218,7 @@ function ProductGallery({ productData }) {
             >
               <Image
                 src={image}
-                alt={productData.name || "Thumbnail"}
+                alt={productData.name || t('thumbnailAlt')}
                 width={200}
                 height={200}
                 className="w-full h-full object-cover"
