@@ -4,6 +4,7 @@ import AfterSaleServices from '@/components/ServicePage/AfterSaleServices'
 import ReplacementAdvantages from '@/components/ServicePage/ReplacementAdvantages'
 import ReplacementPieces from '@/components/ServicePage/ReplacementPieces'
 import ServiceHero from '@/components/ServicePage/ServiceHero'
+import Head from 'next/head'
 import Image from 'next/image'
 import React from 'react'
 
@@ -18,6 +19,10 @@ const advantages = [
 export default function index() {
     return (
         <main className='pt-6 relative bg-gray-50'>
+            <Head>
+                <title>Services - Fennec Holding</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <Image src='/services-page-image.png' alt='Our DNA' width={300} height={400} className='absolute top-0 right-0' />
             <ServiceHero />
             <AfterSaleServices />

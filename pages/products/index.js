@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { LuCircleArrowRight } from 'react-icons/lu';
 import Slider from 'react-slick';
+import Head from 'next/head';
 
 export default function Index() {
   const locale = useLocale(); // Dynamically get the current locale
@@ -96,6 +97,10 @@ export default function Index() {
 
   return (
     <main className="!pt-24 bg-white">
+      <Head>
+        <title>Produits - Fennec Holding</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Banner
         title={t('bannerTitle')}
         backgroundImage="https://placehold.co/1080x600.png"
@@ -236,11 +241,10 @@ const Filter = ({ categories, onSelectCategory }) => {
           categories.map((category) => (
             <li
               key={category.id}
-              className={`cursor-pointer py-2 px-4 mb-2 rounded ${
-                selectedCategory && selectedCategory.id === category.id
+              className={`cursor-pointer py-2 px-4 mb-2 rounded ${selectedCategory && selectedCategory.id === category.id
                   ? 'bg-primary text-white'
                   : 'bg-gray-100 hover:bg-gray-200'
-              }`}
+                }`}
               onClick={() => handleCategorySelect(category)}
             >
               {category.name}
@@ -252,7 +256,7 @@ const Filter = ({ categories, onSelectCategory }) => {
               key={`skeleton-${index}`}
               className="py-2 px-4 mb-2 rounded bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
             >
-               
+
             </li>
           ))
         )}

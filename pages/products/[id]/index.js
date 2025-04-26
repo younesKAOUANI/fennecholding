@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import Head from "next/head";
 
 // Skeleton Component (unchanged)
 const ProductPageSkeleton = () => (
@@ -105,6 +106,10 @@ export default function ProductPage() {
 
   return (
     <main className="!pt-20 bg-white">
+      <Head>
+        <title>{product.name} - Fennec Holding</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="section">
         <h1 className="font-bold text-4xl text-left mb-8">{product.name}</h1>
 
@@ -194,9 +199,8 @@ function ProductGallery({ productData }) {
             <button
               key={index}
               onClick={() => setSelectedImage(image)}
-              className={`border-2 rounded-md overflow-hidden w-24 h-24 ${
-                selectedImage === image ? "border-blue-500" : "border-gray-300"
-              }`}
+              className={`border-2 rounded-md overflow-hidden w-24 h-24 ${selectedImage === image ? "border-blue-500" : "border-gray-300"
+                }`}
             >
               <Image
                 src={image}
