@@ -20,12 +20,11 @@ export default function Header() {
         </Link>
         <nav className='hidden md:flex gap-10 items-center'>
           <MainMenu />
-          <LanguageSwitcher />
         </nav>
         <button className="md:hidden text-3xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <FiMenu />
         </button>
-        <Search />
+        <LanguageSwitcher />
       </div>
       <AnimatePresence>
         {isMenuOpen && <MainMenuMobile onClose={() => setIsMenuOpen(false)} />}
@@ -144,6 +143,7 @@ function Search() {
   );
 }
 
+
 function LanguageSwitcher() {
   const router = useRouter();
   const { locale } = router;
@@ -152,17 +152,30 @@ function LanguageSwitcher() {
     router.push(router.pathname, router.pathname, { locale: newLocale });
   };
 
+  // Flag images (make sure to adjust paths to where your flags are stored)
+  const flags = {
+    en: "/flags/en.png", // English flag
+    fr: "/flags/fr.png", // French flag
+    ar: "/flags/ar.png", // Arabic flag
+  };
+
   return (
-    <select
-      value={locale}
-      onChange={(e) => handleChange(e.target.value)}
-      className="px-3 py-2 bg-white border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent text-primary"
-    >
+    <div className="flex gap-2">
       {i18n.locales.map((loc) => (
-        <option key={loc} value={loc}>
-          {loc.toUpperCase()}
-        </option>
+        <button
+          key={loc}
+          onClick={() => handleChange(loc)}
+          className={`w-7 h-7 rounded-full transition-transform ${locale === loc ? "ring-2 ring-primary scale-110" : "opacity-70 hover:opacity-100"
+            }`}
+          aria-label={`Switch to ${loc}`}
+        >
+          <img
+            src={flags[loc]}
+            alt={`Flag of ${loc}`}
+            className="w-full h-full object-cover rounded-full border border-black"
+          />
+        </button>
       ))}
-    </select>
+    </div>
   );
 }

@@ -11,6 +11,7 @@ import Aos from "aos";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { i18n } from "../i18n";
+import ContactSidebar from "@/components/main/ContactSidebar";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -61,8 +62,9 @@ export default function App({ Component, pageProps }) {
 
       return (
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <div dir={direction}>
+          <div dir={direction} className="relative">
             <Header />
+            <ContactSidebar/>
             <Component {...pageProps} />
             <Footer />
           </div>
