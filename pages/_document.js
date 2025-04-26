@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { i18n } from '../i18n';
+import HomeMetaData from '@/components/Metadata/HomeMetaData';
 
 export default class MyDocument extends Document {
   render() {
@@ -10,6 +11,7 @@ export default class MyDocument extends Document {
       <Html lang={locale} dir={direction}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <HomeMetaData />
           {i18n.locales.map((loc) => (
             <link
               key={loc}
