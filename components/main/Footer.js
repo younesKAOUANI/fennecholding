@@ -41,8 +41,9 @@ export default function Footer() {
         </div>
         <Map />
       </div>
-      <div className='max-w-6xl mx-auto border-t-2 border-gray-300 text-gray-800 text-center py-4'>
-        <p>{t('copyright')}</p>
+      <div className='flex gap-2 items-center justify-center max-w-6xl mx-auto border-t-2 border-gray-300 text-gray-800 text-center py-4'>
+        <p>{t('copyright')} </p>
+        <Image src='/logo-evolvit.png' alt='Logo' width={96} height={40} />
       </div>
     </footer>
   );

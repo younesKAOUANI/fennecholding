@@ -7,39 +7,37 @@ import { useParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import Head from "next/head";
 
-// Skeleton Component (unchanged)
 const ProductPageSkeleton = () => (
-  <main className="!pt-20 bg-white">
-    <div className="section">
-      <div className="h-10 w-1/2 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-8"></div>
-      <div className="flex justify-center w-full gap-6 items-center h-[650px]">
-        <div className="flex-1 h-[650px] bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-lg"></div>
-        <div className="flex flex-col gap-2 h-[500px] w-24">
+  <main className="!pt-16 md:pt-20 bg-white">
+    <div className="section px-4 md:px-6 lg:px-8">
+      <div className="h-8 md:h-10 w-3/4 md:w-1/2 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-6 md:mb-8"></div>
+      <div className="flex flex-col md:flex-row justify-center w-full gap-4 md:gap-6 items-center">
+        <div className="w-full md:flex-1 h-64 md:h-[500px] bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-lg"></div>
+        <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto h-auto md:h-[400px] w-full md:w-20">
           {Array.from({ length: 4 }).map((_, index) => (
             <div
               key={`skeleton-thumb-${index}`}
-              className="w-24 h-24 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"
+              className="w-20 h-20 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"
             ></div>
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-8 mt-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-8 md:mt-12">
         <div>
-          <div className="h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
-          <div className="h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-8"></div>
-          <div className="h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
-          <div className="h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
-          <div className="flex gap-4 mt-8">
-            <div className="h-12 w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
-            <div className="h-12 w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+          <div className="h-6 md:h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
+          <div className="h-20 md:h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-6 md:mb-8"></div>
+          <div className="h-6 md:h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
+          <div className="h-20 md:h-24 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+          <div className="flex gap-4 mt-6 md:mt-8">
+            <div className="h-10 md:h-12 w-24 md:w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+            <div className="h-10 md:h-12 w-24 md:w-32 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
           </div>
         </div>
         <div>
-          <div className="h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
+          <div className="h-6 md:h-8 w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-4"></div>
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={`skeleton-highlight-${index}`} className="mb-4">
-              <div className="h-6 w-1/2 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-2"></div>
-              <div className="h-16 w-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+              <div className="h-5 md:h-6 w-1/2 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mb-2"></div>
             </div>
           ))}
         </div>
@@ -97,38 +95,42 @@ export default function ProductPage() {
 
   if (error || !product) {
     return (
-      <div className="text-center py-10 text-red-600">
+      <div className="text-center py-10 text-red-600 text-sm md:text-base">
         {error || t("productNotFound")}
       </div>
     );
   }
 
   return (
-    <main className="!pt-20 bg-white">
+    <main className="!pt-16 md:pt-20 bg-white">
       <Head>
         <title>{product.name} - Fennec Holding</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="section">
-        <h1 className="font-bold text-4xl text-left mb-8">{product.name}</h1>
+      <div className="section px-4 md:px-6 lg:px-8">
+        <h1 className="font-bold text-2xl md:text-4xl text-left mb-6 md:mb-8">
+          {product.name}
+        </h1>
 
-        {/* Product Gallery */}
         <ProductGallery productData={product} />
 
-        {/* Product Details */}
-        <div className="grid grid-cols-2 gap-8 items-start mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-8 md:mt-12">
           <div>
-            <p className="font-bold text-2xl mb-4">{t("specificationsTitle")}</p>
-            <p>{product.specifications}</p>
-            <p className="font-bold text-2xl mb-4 mt-8">{t("configurationsTitle")}</p>
-            <p>{product.configurations}</p>
-            <div className="flex gap-4 items-center justify-start mt-8">
+            <p className="font-bold text-lg md:text-2xl mb-3 md:mb-4">
+              {t("specificationsTitle")}
+            </p>
+            <p className="text-sm md:text-base">{product.specifications}</p>
+            <p className="font-bold text-lg md:text-2xl mb-3 md:mb-4 mt-6 md:mt-8">
+              {t("configurationsTitle")}
+            </p>
+            <p className="text-sm md:text-base">{product.configurations}</p>
+            <div className="flex flex-wrap gap-3 md:gap-4 items-center justify-start mt-6 md:mt-8">
               {product.brochure && (
                 <Link
                   href={product.brochure}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
+                  className="text-sm md:text-xl font-semibold px-4 md:px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
                 >
                   {t("brochure")}
                 </Link>
@@ -138,7 +140,7 @@ export default function ProductPage() {
                   href={product.datasheet}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xl font-semibold px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
+                  className="text-sm md:text-xl font-semibold px-4 md:px-6 py-2 bg-primary text-white rounded-md hover:scale-95"
                 >
                   {t("datasheet")}
                 </Link>
@@ -147,18 +149,20 @@ export default function ProductPage() {
           </div>
 
           <div>
-            <p className="font-semibold text-3xl mb-4">{t("highlightsTitle")}</p>
+            <p className="font-semibold text-xl md:text-3xl mb-3 md:mb-4">
+              {t("highlightsTitle")}
+            </p>
             {product.highlights.length > 0 ? (
               product.highlights.map((highlight, index) => (
-                <div key={index} TanteclassName="flex flex-col gap-1 items-start mb-4">
-                  <h3 className="font-bold text-lg flex items-center">
+                <div key={index} className="flex flex-col gap-1 items-start mb-3 md:mb-4">
+                  <h3 className="font-bold text-base md:text-lg flex items-center">
                     <span className="bg-primary mr-2 inline-block rounded-full w-2 h-2"></span>
                     {highlight || t("noHighlightTitle")}
                   </h3>
                 </div>
               ))
             ) : (
-              <p>{t("noHighlights")}</p>
+              <p className="text-sm md:text-base">{t("noHighlights")}</p>
             )}
           </div>
         </div>
@@ -172,9 +176,9 @@ function ProductGallery({ productData }) {
   const [selectedImage, setSelectedImage] = useState(productData.images?.[0] || "/placeholder.png");
 
   return (
-    <div className="flex justify-center w-full gap-6 items-center h-[650px]">
-      <div className="flex-1 flex justify-center items-center rounded-lg overflow-hidden">
-        <div className="w-full h-[650px] rounded-lg overflow-hidden">
+    <div className="flex flex-col md:flex-row justify-center w-full gap-4 md:gap-6 items-center">
+      <div className="w-full md:flex-1 rounded-lg overflow-hidden">
+        <div className="w-full h-64 md:h-[500px] rounded-lg overflow-hidden">
           <Image
             src={selectedImage}
             alt={productData.name || t("productImageAlt")}
@@ -184,13 +188,13 @@ function ProductGallery({ productData }) {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2 overflow-y-auto h-[500px]">
+      <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto h-auto md:h-[400px] w-full md:w-20">
         {productData.images?.length > 0 ? (
           productData.images.map((image, index) => (
             <button
               key={index}
               onClick={() => setSelectedImage(image)}
-              className={`border-2 rounded-md overflow-hidden w-24 h-24 ${
+              className={`border-2 rounded-md overflow-hidden w-20 h-20 flex-shrink-0 ${
                 selectedImage === image ? "border-blue-500" : "border-gray-300"
               }`}
             >
@@ -204,7 +208,7 @@ function ProductGallery({ productData }) {
             </button>
           ))
         ) : (
-          <div className="w-24 h-24 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+          <div className="w-20 h-20 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md flex-shrink-0"></div>
         )}
       </div>
     </div>

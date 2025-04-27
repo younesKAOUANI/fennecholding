@@ -1,4 +1,5 @@
 
+import ServicesMetaData from '@/components/Metadata/ServicesMetaData'
 import AfterSaleAdvantages from '@/components/ServicePage/AfterSaleAdvantages'
 import AfterSaleServices from '@/components/ServicePage/AfterSaleServices'
 import ReplacementAdvantages from '@/components/ServicePage/ReplacementAdvantages'
@@ -19,16 +20,13 @@ const advantages = [
 export default function index() {
     return (
         <main className='pt-6 relative bg-gray-50'>
-            <Head>
-                <title>Services - Fennec Holding</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+            <ServicesMetaData />
             <Image src='/services-page-image.png' alt='Our DNA' width={300} height={400} className='absolute top-0 right-0' />
             <ServiceHero />
             <AfterSaleServices />
             <AfterSaleAdvantages />
             <ReplacementPieces />
-            {/* <ReplacementAdvantages /> */}
+            <ReplacementAdvantages />
         </main >
     )
 }

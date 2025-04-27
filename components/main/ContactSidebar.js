@@ -11,11 +11,12 @@ export default function ContactSidebar() {
             <div className="flex flex-col items-center justify-center gap-4">
                 {/* Phone */}
                 <div className="relative group">
-                    <Link href="tel:+1234567890">
+                    <Link href="tel:+213561646790">
                         <FaPhoneAlt className="text-2xl text-primary cursor-pointer" />
                     </Link>
                     <div className="absolute right-10 hidden min-w-32 group-hover:flex items-center bg-white text-primary text-sm font-semibold rounded-md px-3 py-1 shadow-md">
-                        +1 234 567 890
+                        +213560436496 <br/>
+                        +213561646790
                     </div>
                 </div>
 

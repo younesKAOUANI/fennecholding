@@ -7,7 +7,7 @@ const HomeMetaData = () => {
       {/* Référencement de base */}
       <title>Fennec Holding | Vente de Machines de Construction en Algérie</title>
       <meta name="description" content="Découvrez Fennec Holding, fournisseur leader de machines de construction et d'équipements lourds en Algérie." />
-      <meta name="keywords" content="machines de construction Algérie, équipements lourds Algérie, Fennec Holding, Fennec Group, fournisseur machines de chantier" />
+      <meta name="keywords" content="fennec, fennec holding, dz, algerie, construction, fennec construction, fennec holding dz, fennec holding construction, fennec holding construction dz, machine de construction en algerie, machines de construction Algérie, équipements lourds Algérie, Fennec Holding, Fennec Group, fournisseur machines de chantier, vente engins de chantier Algérie, machines BTP Algérie, matériel de construction Algérie, bulldozers Algérie, grues Algérie, pelleteuses Algérie, chargeuses Algérie, compacteurs Algérie, matériel BTP neuf Algérie, location engins de chantier Algérie, vente machines de chantier Alger, fournisseurs BTP Algérie, machines terrassement Algérie, équipements industriels Algérie, tractopelles Algérie, pelles hydrauliques Algérie, camions de chantier Algérie, nacelles élévatrices Algérie, équipements génie civil Algérie, outillage construction Algérie, vente matériel de chantier Algérie, vente grues mobiles Algérie, importation machines BTP Algérie" />
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href="https://www.fennecholding.dz/" />
 
