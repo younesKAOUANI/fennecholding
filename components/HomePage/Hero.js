@@ -7,12 +7,12 @@ import { useTranslations } from "next-intl";
 export default function Hero() {
   const t = useTranslations("hero");
   const placeholderImages = [
-    "https://placehold.co/124x124.png",
-    "https://placehold.co/124x124.png",
-    "https://placehold.co/124x124.png",
-    "https://placehold.co/124x124.png",
-    "https://placehold.co/124x124.png",
-    "https://placehold.co/124x124.png",
+    "/logos/1.png",
+    "/logos/2.png",
+    "/logos/3.png",
+    "/logos/4.png",
+    "/logos/5.png",
+    "/logos/6.png",
   ];
 
   return (

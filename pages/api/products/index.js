@@ -23,18 +23,15 @@ export default async function handler(req, res) {
           message: 'Chaque traduction doit avoir un locale, un nom, des spécifications et des configurations',
         });
       }
-      if (!Array.isArray(t.highlights) || t.highlights.some((h) => !h.title || !h.description)) {
+      if (!Array.isArray(t.highlights) || t.highlights.some((h) => typeof h !== 'string' || !h.trim())) {
         return res.status(400).json({
-          message: 'Tous les points forts doivent avoir un titre et une description',
+          message: 'Tous les points forts doivent être des chaînes non vides',
         });
       }
     }
 
     try {
-      // Verify category exists
-      const category = await prisma.category.findUnique({
-        where: { id: categoryId },
-      });
+      const category = await prisma.category.findUnique({ where: { id: categoryId } });
       if (!category) {
         return res.status(400).json({ message: 'Catégorie invalide' });
       }
@@ -51,7 +48,7 @@ export default async function handler(req, res) {
               name: t.name,
               specifications: t.specifications,
               configurations: t.configurations,
-              highlights: JSON.stringify(t.highlights), // Store as JSON string
+              highlights: t.highlights, // Store directly as array of strings
             })),
           },
         },
@@ -82,4 +79,4 @@ export default async function handler(req, res) {
   } else {
     return res.status(405).json({ message: 'Méthode non autorisée' });
   }
-} 
+}

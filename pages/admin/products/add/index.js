@@ -1,41 +1,23 @@
-  import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Select from "react-select";
 
 export default function AddProduct() {
   const router = useRouter();
   const [productForm, setProductForm] = useState({
-    images: [], // Array of uploaded image URLs
+    images: [],
     categoryId: "",
-    datasheet: "", // URL from uploaded datasheet
-    brochure: "", // URL from uploaded brochure
+    datasheet: "",
+    brochure: "",
     translations: [
-      {
-        locale: "en",
-        name: "",
-        specifications: "",
-        configurations: "",
-        highlights: [{ title: "", description: "" }],
-      },
-      {
-        locale: "fr",
-        name: "",
-        specifications: "",
-        configurations: "",
-        highlights: [{ title: "", description: "" }],
-      },
-      {
-        locale: "ar",
-        name: "",
-        specifications: "",
-        configurations: "",
-        highlights: [{ title: "", description: "" }],
-      },
+      { locale: "en", name: "", specifications: "", configurations: "", highlights: [""] },
+      { locale: "fr", name: "", specifications: "", configurations: "", highlights: [""] },
+      { locale: "ar", name: "", specifications: "", configurations: "", highlights: [""] },
     ],
   });
-  const [imageFiles, setImageFiles] = useState([]); // Selected image files
-  const [datasheetFile, setDatasheetFile] = useState(null); // Selected datasheet file
-  const [brochureFile, setBrochureFile] = useState(null); // Selected brochure file
+  const [imageFiles, setImageFiles] = useState([]);
+  const [datasheetFile, setDatasheetFile] = useState(null);
+  const [brochureFile, setBrochureFile] = useState(null);
   const [message, setMessage] = useState("");
   const [categories, setCategories] = useState([]);
 
@@ -97,16 +79,14 @@ export default function AddProduct() {
     }));
   };
 
-  const handleHighlightChange = (locale, index, field, value) => {
+  const handleHighlightChange = (locale, index, value) => {
     setProductForm((prev) => ({
       ...prev,
       translations: prev.translations.map((t) =>
         t.locale === locale
           ? {
               ...t,
-              highlights: t.highlights.map((h, i) =>
-                i === index ? { ...h, [field]: value } : h
-              ),
+              highlights: t.highlights.map((h, i) => (i === index ? value : h)),
             }
           : t
       ),
@@ -117,12 +97,7 @@ export default function AddProduct() {
     setProductForm((prev) => ({
       ...prev,
       translations: prev.translations.map((t) =>
-        t.locale === locale
-          ? {
-              ...t,
-              highlights: [...t.highlights, { title: "", description: "" }],
-            }
-          : t
+        t.locale === locale ? { ...t, highlights: [...t.highlights, ""] } : t
       ),
     }));
   };
@@ -132,10 +107,7 @@ export default function AddProduct() {
       ...prev,
       translations: prev.translations.map((t) =>
         t.locale === locale
-          ? {
-              ...t,
-              highlights: t.highlights.filter((_, i) => i !== index),
-            }
+          ? { ...t, highlights: t.highlights.filter((_, i) => i !== index) }
           : t
       ),
     }));
@@ -154,9 +126,7 @@ export default function AddProduct() {
       const { fileUrl } = await response.json();
       return fileUrl;
     } catch (error) {
-      throw new Error(
-        `Erreur lors du téléchargement du ${type}: ${error.message}`
-      );
+      throw new Error(`Erreur lors du téléchargement du ${type}: ${error.message}`);
     }
   };
 
@@ -184,30 +154,21 @@ export default function AddProduct() {
     }
 
     const hasEmptyHighlights = productForm.translations.some((t) =>
-      t.highlights.some((h) => !h.title.trim() || !h.description.trim())
+      t.highlights.some((h) => !h.trim())
     );
     if (hasEmptyHighlights) {
-      setMessage(
-        "Veuillez remplir tous les champs des points forts pour chaque langue."
-      );
+      setMessage("Veuillez remplir tous les champs des points forts pour chaque langue.");
       return;
     }
 
     try {
-      // Upload images
       const imageUrls = await Promise.all(
         imageFiles.map((file) => uploadFileToFTP(file, "image"))
       );
-
-      // Upload datasheet and brochure (if provided)
       let datasheetUrl = "";
-      if (datasheetFile) {
-        datasheetUrl = await uploadFileToFTP(datasheetFile, "fiche technique");
-      }
+      if (datasheetFile) datasheetUrl = await uploadFileToFTP(datasheetFile, "fiche technique");
       let brochureUrl = "";
-      if (brochureFile) {
-        brochureUrl = await uploadFileToFTP(brochureFile, "brochure");
-      }
+      if (brochureFile) brochureUrl = await uploadFileToFTP(brochureFile, "brochure");
 
       const updatedForm = {
         ...productForm,
@@ -234,27 +195,9 @@ export default function AddProduct() {
         datasheet: "",
         brochure: "",
         translations: [
-          {
-            locale: "en",
-            name: "",
-            specifications: "",
-            configurations: "",
-            highlights: [{ title: "", description: "" }],
-          },
-          {
-            locale: "fr",
-            name: "",
-            specifications: "",
-            configurations: "",
-            highlights: [{ title: "", description: "" }],
-          },
-          {
-            locale: "ar",
-            name: "",
-            specifications: "",
-            configurations: "",
-            highlights: [{ title: "", description: "" }],
-          },
+          { locale: "en", name: "", specifications: "", configurations: "", highlights: [""] },
+          { locale: "fr", name: "", specifications: "", configurations: "", highlights: [""] },
+          { locale: "ar", name: "", specifications: "", configurations: "", highlights: [""] },
         ],
       });
       setImageFiles([]);
@@ -272,16 +215,11 @@ export default function AddProduct() {
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Ajouter un Produit</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Catégorie
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
           <Select
             options={categories}
             onChange={(selected) =>
-              setProductForm((prev) => ({
-                ...prev,
-                categoryId: selected?.value || "",
-              }))
+              setProductForm((prev) => ({ ...prev, categoryId: selected?.value || "" }))
             }
             placeholder="Sélectionner une catégorie"
             isClearable
@@ -290,9 +228,7 @@ export default function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Images
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
           <input
             type="file"
             accept="image/*"
@@ -319,9 +255,7 @@ export default function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Fiche Technique
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Fiche Technique</label>
           <input
             type="file"
             accept=".pdf"
@@ -343,9 +277,7 @@ export default function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Brochure
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Brochure</label>
           <input
             type="file"
             accept=".pdf"
@@ -391,11 +323,7 @@ export default function AddProduct() {
                 value={translation.name}
                 onChange={(e) => handleChange(e, translation.locale)}
                 placeholder={`Nom en ${
-                  translation.locale === "en"
-                    ? "Anglais"
-                    : translation.locale === "fr"
-                    ? "Français"
-                    : "Arabe"
+                  translation.locale === "en" ? "Anglais" : translation.locale === "fr" ? "Français" : "Arabe"
                 }`}
                 dir={translation.locale === "ar" ? "rtl" : "ltr"}
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -414,11 +342,7 @@ export default function AddProduct() {
                 value={translation.specifications}
                 onChange={(e) => handleChange(e, translation.locale)}
                 placeholder={`Spécifications en ${
-                  translation.locale === "en"
-                    ? "Anglais"
-                    : translation.locale === "fr"
-                    ? "Français"
-                    : "Arabe"
+                  translation.locale === "en" ? "Anglais" : translation.locale === "fr" ? "Français" : "Arabe"
                 }`}
                 dir={translation.locale === "ar" ? "rtl" : "ltr"}
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -438,11 +362,7 @@ export default function AddProduct() {
                 value={translation.configurations}
                 onChange={(e) => handleChange(e, translation.locale)}
                 placeholder={`Configurations en ${
-                  translation.locale === "en"
-                    ? "Anglais"
-                    : translation.locale === "fr"
-                    ? "Français"
-                    : "Arabe"
+                  translation.locale === "en" ? "Anglais" : translation.locale === "fr" ? "Français" : "Arabe"
                 }`}
                 dir={translation.locale === "ar" ? "rtl" : "ltr"}
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -450,38 +370,14 @@ export default function AddProduct() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Points Forts
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Points Forts</label>
               {translation.highlights.map((highlight, index) => (
                 <div key={index} className="flex gap-4 mb-2 items-center">
                   <input
                     type="text"
-                    value={highlight.title}
-                    onChange={(e) =>
-                      handleHighlightChange(
-                        translation.locale,
-                        index,
-                        "title",
-                        e.target.value
-                      )
-                    }
+                    value={highlight}
+                    onChange={(e) => handleHighlightChange(translation.locale, index, e.target.value)}
                     placeholder="Titre"
-                    dir={translation.locale === "ar" ? "rtl" : "ltr"}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <input
-                    type="text"
-                    value={highlight.description}
-                    onChange={(e) =>
-                      handleHighlightChange(
-                        translation.locale,
-                        index,
-                        "description",
-                        e.target.value
-                      )
-                    }
-                    placeholder="Description"
                     dir={translation.locale === "ar" ? "rtl" : "ltr"}
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -516,9 +412,7 @@ export default function AddProduct() {
       </form>
       {message && (
         <p
-          className={`mt-4 text-center ${
-            message.includes("Erreur") ? "text-red-600" : "text-green-600"
-          }`}
+          className={`mt-4 text-center ${message.includes("Erreur") ? "text-red-600" : "text-green-600"}`}
         >
           {message}
         </p>

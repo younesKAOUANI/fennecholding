@@ -1,4 +1,3 @@
-// pages/index.jsx
 import DataTable from '@/components/main/DataTable'
 import MobileDataTable from '@/components/main/MobileDataTable'
 import Title from '@/components/main/Title'
@@ -8,11 +7,9 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 
 export default function Index() {
-  // State to store the full product data and filtered data
   const [data, setData] = useState([])
   const [filteredData, setFilteredData] = useState([])
 
-  // Fetch the products from the API
   const fetchData = async () => {
     try {
       const response = await fetch('/api/products', {
@@ -21,12 +18,17 @@ export default function Index() {
           'Content-Type': 'application/json',
         },
       })
+      if (!response.ok) {
+        throw new Error('Failed to fetch products')
+      }
       const newData = await response.json()
-      setData(newData.products)
-      setFilteredData(newData.products) // Initially, no filter is applied.
+      setData(newData.products || [])
+      setFilteredData(newData.products || [])
       console.log(newData, 'newData')
     } catch (error) {
       console.error('Error fetching products:', error)
+      setData([])
+      setFilteredData([])
     }
   }
 
@@ -34,13 +36,10 @@ export default function Index() {
     fetchData()
   }, [])
 
-  // Function to filter products by category when a category is selected.
   const handleCategoryFilter = (selectedOption) => {
     if (!selectedOption) {
-      // If no category is selected, display all products.
       setFilteredData(data)
     } else {
-      // Filter the products by matching categoryId.
       const filtered = data.filter(
         (item) => item.categoryId === selectedOption.value
       )
@@ -58,10 +57,6 @@ export default function Index() {
           Ajouter un Produit
         </Link>
       </Title>
-      {/* 
-         Pass filteredData to the MobileDataTable along with the table view and the Filter component.
-         We pass our handleCategoryFilter callback as onFilterChange to Filter.
-      */}
       <MobileDataTable
         data={filteredData}
         tableData={productsTableView(fetchData)}
@@ -82,11 +77,15 @@ const Filter = ({ onFilterChange }) => {
           'Content-Type': 'application/json',
         },
       })
+      if (!response.ok) {
+        throw new Error(`Failed to fetch categories: ${response.status}`)
+      }
       const newData = await response.json()
       setCategories(newData)
       console.log('Categories:', newData)
     } catch (error) {
       console.error('Error fetching categories:', error)
+      setCategories([]) // Set to empty array on error
     }
   }
 
@@ -94,16 +93,19 @@ const Filter = ({ onFilterChange }) => {
     fetchCategories()
   }, [])
 
-  // Map the fetched categories to the format expected by react-select.
-  const options = categories.map((cat) => ({
-    value: cat.id,
-    label: cat.name,
-  }))
+  // Map categories to options using the French translation for the label
+  const options = categories.map((cat) => {
+    const frenchTranslation = cat.translations.find((t) => t.locale === 'fr')
+    return {
+      value: cat.id,
+      label: frenchTranslation ? frenchTranslation.name : 'N/A',
+    }
+  })
 
   return (
     <Select
       options={options}
-      onChange={onFilterChange} // Call the parent's filter function when a selection is made.
+      onChange={onFilterChange}
       placeholder="Sélectionner une catégorie"
       isClearable
       className="w-80"

@@ -48,18 +48,16 @@ const ProductPageSkeleton = () => (
   </main>
 );
 
-// Main ProductPage Component
 export default function ProductPage() {
-  const locale = useLocale(); // Dynamically get the current locale
+  const locale = useLocale();
   const t = useTranslations("ProductPage");
   const params = useParams() || {};
-  const id = params.id; // Directly use params.id
+  const id = params.id;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Validate the ID
     if (!id || !/^[a-f0-9]{24}$/.test(id)) {
       setError(t("invalidId"));
       setLoading(false);
@@ -76,13 +74,14 @@ export default function ProductPage() {
         if (!data?.product) throw new Error(t("invalidData"));
         const translations = data.product.translations || [];
         const selectedTranslation = translations.find((t) => t.locale === locale) || translations[0] || {};
-        console.log("Selected translation locale:", selectedTranslation.locale); // Debug log
         setProduct({
           ...data.product,
           name: selectedTranslation.name || t("unnamedProduct"),
           specifications: selectedTranslation.specifications || t("noSpecifications"),
           configurations: selectedTranslation.configurations || t("noConfigurations"),
-          highlights: Array.isArray(selectedTranslation.highlights) ? selectedTranslation.highlights : [],
+          highlights: Array.isArray(selectedTranslation.highlights)
+            ? selectedTranslation.highlights
+            : [],
           images: Array.isArray(data.product.images) ? data.product.images : ["/placeholder.png"],
         });
       })
@@ -92,7 +91,7 @@ export default function ProductPage() {
         setProduct(null);
       })
       .finally(() => setLoading(false));
-  }, [id, locale, t]); // Include locale in dependencies
+  }, [id, locale, t]);
 
   if (loading) return <ProductPageSkeleton />;
 
@@ -118,14 +117,11 @@ export default function ProductPage() {
 
         {/* Product Details */}
         <div className="grid grid-cols-2 gap-8 items-start mt-12">
-          {/* Specifications & Configurations */}
           <div>
             <p className="font-bold text-2xl mb-4">{t("specificationsTitle")}</p>
             <p>{product.specifications}</p>
-
             <p className="font-bold text-2xl mb-4 mt-8">{t("configurationsTitle")}</p>
             <p>{product.configurations}</p>
-
             <div className="flex gap-4 items-center justify-start mt-8">
               {product.brochure && (
                 <Link
@@ -150,17 +146,15 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* Highlights Section */}
           <div>
             <p className="font-semibold text-3xl mb-4">{t("highlightsTitle")}</p>
             {product.highlights.length > 0 ? (
               product.highlights.map((highlight, index) => (
-                <div key={index} className="flex flex-col gap-1 items-start mb-4">
+                <div key={index} TanteclassName="flex flex-col gap-1 items-start mb-4">
                   <h3 className="font-bold text-lg flex items-center">
                     <span className="bg-primary mr-2 inline-block rounded-full w-2 h-2"></span>
-                    {highlight.title || t("noHighlightTitle")}
+                    {highlight || t("noHighlightTitle")}
                   </h3>
-                  <p>{highlight.description || t("noHighlightDescription")}</p>
                 </div>
               ))
             ) : (
@@ -173,12 +167,9 @@ export default function ProductPage() {
   );
 }
 
-// Product Gallery Component (unchanged)
 function ProductGallery({ productData }) {
   const t = useTranslations("ProductPage");
-  const [selectedImage, setSelectedImage] = useState(
-    productData.images?.[0] || "/placeholder.png"
-  );
+  const [selectedImage, setSelectedImage] = useState(productData.images?.[0] || "/placeholder.png");
 
   return (
     <div className="flex justify-center w-full gap-6 items-center h-[650px]">
@@ -199,8 +190,9 @@ function ProductGallery({ productData }) {
             <button
               key={index}
               onClick={() => setSelectedImage(image)}
-              className={`border-2 rounded-md overflow-hidden w-24 h-24 ${selectedImage === image ? "border-blue-500" : "border-gray-300"
-                }`}
+              className={`border-2 rounded-md overflow-hidden w-24 h-24 ${
+                selectedImage === image ? "border-blue-500" : "border-gray-300"
+              }`}
             >
               <Image
                 src={image}

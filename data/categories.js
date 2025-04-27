@@ -9,24 +9,6 @@ export const categoriesTableView = (fetchCases) => [
     Cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
-    Header: "Image",
-    accessor: "img",
-    Cell: ({ row }) =>
-      row.original.img ? (
-        <div>
-          <Image
-            height={100}
-            width={100}
-            src={row.original.img}
-            className="rounded-md object-cover"
-            alt="Image de la catégorie"
-          />
-        </div>
-      ) : (
-        <div>Aucune image</div>
-      ),
-  },
-  {
     Header: "Nom (Anglais)",
     accessor: "translations",
     id: "name_en",

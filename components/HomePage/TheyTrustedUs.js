@@ -7,12 +7,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const logos = [
-  "https://placehold.co/200x201.png",
-  "https://placehold.co/200x202.png",
-  "https://placehold.co/200x203.png",
-  "https://placehold.co/200x204.png",
-  "https://placehold.co/200x205.png",
-  "https://placehold.co/200x206.png",
+  "/logos/1.png",
+  "/logos/2.png",
+  "/logos/3.png",
+  "/logos/4.png",
+  "/logos/5.png",
+  "/logos/6.png",
+  "/logos/7.png",
+  "/logos/8.png",
 ];
 
 const clientImages = logos.map((src, index) => ({

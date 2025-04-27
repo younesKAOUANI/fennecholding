@@ -15,7 +15,7 @@ export default async function handler(req, res) {
             where: { id },
             include: {
               translations: true,
-              products: { include: { translations: true } }, // Include products with translations
+              products: { include: { translations: true } },
             },
           });
           if (!category) {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
           const categories = await prisma.category.findMany({
             include: {
               translations: true,
-              products: { include: { translations: true } }, // Include products with translations
+              products: { include: { translations: true } },
             },
           });
           return res.status(200).json(categories);
@@ -39,10 +39,11 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { img, translations } = req.body;
+        const { translations } = req.body;
 
-        if (!img || !translations || !Array.isArray(translations) || translations.length === 0) {
-          return res.status(400).json({ message: 'Image URL and at least one translation are required' });
+        // Validation: Ensure translations are provided
+        if (!translations || !Array.isArray(translations) || translations.length === 0) {
+          return res.status(400).json({ message: 'At least one translation is required' });
         }
 
         for (const t of translations) {
@@ -51,9 +52,9 @@ export default async function handler(req, res) {
           }
         }
 
+        // Create category without img
         const category = await prisma.category.create({
           data: {
-            img,
             translations: {
               create: translations.map((t) => ({
                 locale: t.locale,
@@ -74,34 +75,29 @@ export default async function handler(req, res) {
           return res.status(400).json({ message: 'Category ID is required' });
         }
 
-        const { img, translations } = req.body;
+        const { translations } = req.body;
 
-        if (!img && (!translations || !Array.isArray(translations))) {
-          return res.status(400).json({ message: 'At least one field (img or translations) must be provided' });
+        // Validation: Ensure translations are provided and valid
+        if (!translations || !Array.isArray(translations)) {
+          return res.status(400).json({ message: 'Translations must be provided as an array' });
         }
 
-        // Validate translations if provided
-        if (translations) {
-          for (const t of translations) {
-            if (!t.locale || !t.name) {
-              return res.status(400).json({ message: 'Each translation must have a locale and name' });
-            }
+        for (const t of translations) {
+          if (!t.locale || !t.name) {
+            return res.status(400).json({ message: 'Each translation must have a locale and name' });
           }
         }
 
-        // Update category
-        const updateData = {};
-        if (img) updateData.img = img;
-        if (translations) {
-          // Delete existing translations and create new ones
-          await prisma.categoryTranslation.deleteMany({ where: { categoryId: id } });
-          updateData.translations = {
+        // Update category translations (no img)
+        await prisma.categoryTranslation.deleteMany({ where: { categoryId: id } });
+        const updateData = {
+          translations: {
             create: translations.map((t) => ({
               locale: t.locale,
               name: t.name,
             })),
-          };
-        }
+          },
+        };
 
         const category = await prisma.category.update({
           where: { id },

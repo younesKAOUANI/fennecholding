@@ -17,15 +17,7 @@ export default async function handler(req, res) {
       if (!product) {
         return res.status(404).json({ message: 'Produit non trouvé' });
       }
-      // Parse highlights from JSON string
-      const parsedProduct = {
-        ...product,
-        translations: product.translations.map((t) => ({
-          ...t,
-          highlights: JSON.parse(t.highlights || '[]'),
-        })),
-      };
-      return res.status(200).json({ product: parsedProduct });
+      return res.status(200).json({ product });
     } catch (error) {
       console.error('Erreur lors de la récupération du produit:', error);
       return res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -33,7 +25,6 @@ export default async function handler(req, res) {
   } else if (req.method === 'PUT') {
     const { images, categoryId, datasheet, brochure, translations } = req.body;
 
-    // Validate inputs
     if (!categoryId || !translations || !Array.isArray(translations) || translations.length !== 3) {
       return res.status(400).json({
         message: 'Catégorie et trois traductions (Anglais, Français, Arabe) sont requis',
@@ -50,23 +41,19 @@ export default async function handler(req, res) {
           message: 'Chaque traduction doit avoir un locale, un nom, des spécifications et des configurations',
         });
       }
-      if (!Array.isArray(t.highlights) || t.highlights.some((h) => !h.title || !h.description)) {
+      if (!Array.isArray(t.highlights) || t.highlights.some((h) => typeof h !== 'string' || !h.trim())) {
         return res.status(400).json({
-          message: 'Tous les points forts doivent avoir un titre et une description',
+          message: 'Tous les points forts doivent être des chaînes non vides',
         });
       }
     }
 
     try {
-      // Verify category exists
-      const category = await prisma.category.findUnique({
-        where: { id: categoryId },
-      });
+      const category = await prisma.category.findUnique({ where: { id: categoryId } });
       if (!category) {
         return res.status(400).json({ message: 'Catégorie invalide' });
       }
 
-      // Update product
       const product = await prisma.product.update({
         where: { id },
         data: {
@@ -75,13 +62,13 @@ export default async function handler(req, res) {
           datasheet: datasheet || null,
           brochure: brochure || null,
           translations: {
-            deleteMany: {}, // Delete existing translations
+            deleteMany: {},
             create: translations.map((t) => ({
               locale: t.locale,
               name: t.name,
               specifications: t.specifications,
               configurations: t.configurations,
-              highlights: JSON.stringify(t.highlights),
+              highlights: t.highlights, // Store directly as array of strings
             })),
           },
         },
@@ -91,25 +78,14 @@ export default async function handler(req, res) {
         },
       });
 
-      // Parse highlights for response
-      const parsedProduct = {
-        ...product,
-        translations: product.translations.map((t) => ({
-          ...t,
-          highlights: JSON.parse(t.highlights || '[]'),
-        })),
-      };
-
-      return res.status(200).json({ message: 'Produit mis à jour avec succès', product: parsedProduct });
+      return res.status(200).json({ message: 'Produit mis à jour avec succès', product });
     } catch (error) {
       console.error('Erreur lors de la mise à jour du produit:', error);
       return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   } else if (req.method === 'DELETE') {
     try {
-      await prisma.product.delete({
-        where: { id },
-      });
+      await prisma.product.delete({ where: { id } });
       return res.status(200).json({ message: 'Produit supprimé avec succès' });
     } catch (error) {
       console.error('Erreur lors de la suppression du produit:', error);
