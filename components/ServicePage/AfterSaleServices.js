@@ -10,7 +10,7 @@ export default function AfterSaleServices({ button = false }) {
 
   return (
     <section className='bg-gray-50'>
-      <div className='section flex flex-col md:flex-row gap-6 md:gap-8 justify-between px-4 py-12 md:px-6 md:py-16'>
+      <div className='section flex flex-col md:flex-row gap-6 md:gap-8 justify-between items-center px-4 py-12 md:px-6 md:py-16'>
         <div className='flex flex-col gap-6 items-start w-full md:w-1/2' data-aos="fade-left">
           <div className='flex gap-2 items-end'>
             <Image src='/aftersaleicon.png' alt='After Sale Services' width={24} height={24} />
@@ -20,7 +20,7 @@ export default function AfterSaleServices({ button = false }) {
           <p className='text-base md:text-xl text-justify'>{t('description')}</p>
           {button && (
             <Link
-              href={'/'}
+              href={'/services'}
               data-aos="fade-in"
               className='text-lg md:text-xl font-medium px-4 py-2 text-primary rounded-full flex items-center justify-center gap-4 hover:scale-95 border-2 border-primary hover:bg-primary hover:text-white'
             >

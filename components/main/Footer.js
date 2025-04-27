@@ -20,7 +20,8 @@ export default function Footer() {
             <ul className='flex flex-col gap-2 items-left'>
               <li className='text-lg font-medium hover:text-primary flex flex-col gap-1 mt-4'>
                 <h3 className='text-2xl'>{t('phone_label')}</h3>
-                <Link href='tel:+2250765345678' className='text-gray-600'>{t('phone')}</Link>
+                <Link href='tel:+213561646190' className='text-gray-600 text-reverse'>{t('phone')}</Link>
+                <Link href='tel:+213560436496' className='text-gray-600'>{t('phone-2')}</Link>
               </li>
               <li className='text-lg font-medium hover:text-primary flex flex-col gap-1 mt-4'>
                 <h3 className='text-2xl'>{t('email_label')}</h3>

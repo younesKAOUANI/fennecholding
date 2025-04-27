@@ -9,13 +9,13 @@ export const productsTableView = (fetchCases) => [
   { Header: "Categorie", accessor: "category.name" },
   { 
     Header: "Image", 
-    accessor: "img", 
+    accessor: "images", 
     Cell: ({ row }) => (
       <div>
         <Image
           height={200}
           width={200}
-          src={row.original.img[0]}
+          src={row.original.images[0]}
           className="rounded-md"
           alt={`Category ${row.original.name} Image`}
         />

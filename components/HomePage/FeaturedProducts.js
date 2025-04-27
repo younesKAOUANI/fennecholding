@@ -54,7 +54,7 @@ export default function FeaturedProducts() {
         <div className='flex flex-col md:flex-row justify-between items-center mt-12 relative z-10 gap-4'>
           <h2 className='text-2xl md:text-5xl  font-semibold' data-aos="fade-right">{t('title')}</h2>
           <Link
-            href={'/'}
+            href={'/products'}
             data-aos="fade-in"
             className='text-lg md:text-xl font-medium px-4 py-2 bg-primary text-white rounded-full flex items-center justify-center gap-4 hover:scale-95'
           >

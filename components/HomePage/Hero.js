@@ -16,8 +16,8 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative w-full min-h-screen bg-gray-50 overflow-hidden border-b-4 border-primary/60">
-      <div className="container mx-auto pt-32 px-4 py-12 md:py-16 lg:py-20 flex items-center justify-center min-h-full">
+    <section className="relative w-full bg-gray-50 overflow-hidden border-b-4 border-primary/60">
+      <div className="container mx-auto pt-32 px-4 py-12 md:py-16 lg:py-20 flex items-center justify-center ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="flex flex-col gap-6" data-aos="fade-right" data-aos-duration="800">
             <h1 className="text-lg md:text-xl lg:text-2xl font-semibold text-primary">Fennec Holding</h1>

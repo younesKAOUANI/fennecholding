@@ -11,22 +11,22 @@ export default function AdvantagesFennec() {
     {
       label: t('stats.0.label'),
       text: t('stats.0.text'),
-      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
+      icon: "/first-icon.png"
     },
     {
       label: t('stats.1.label'),
       text: t('stats.1.text'),
-      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
+      icon: "/second-icon.png"
     },
     {
       label: t('stats.2.label'),
       text: t('stats.2.text'),
-      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
+      icon: "/third-icon.png"
     },
     {
       label: t('stats.3.label'),
       text: t('stats.3.text'),
-      icon: <IoCheckmarkDoneOutline size={24} className="mb-4 text-primary" />
+      icon: "/fourth-icon.png"
     }
   ];
 
@@ -47,7 +47,7 @@ export default function AdvantagesFennec() {
             data-aos='fade-left'
             data-aos-delay={index * 100}
           >
-            {stat.icon}
+            <Image width={40} height={40} src={stat.icon} alt='about' className='mb-4' />
             <p className="text-xl md:text-2xl mb-4 font-bold">{stat.label}</p>
             <p className="text-base md:text-lg mb-1">{stat.text}</p>
           </div>

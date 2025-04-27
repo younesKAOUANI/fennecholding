@@ -4,13 +4,14 @@ import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { useTranslations } from 'next-intl';
 
 export default function AfterSaleAdvantages() {
-  const t = useTranslations('services.replacement_advantages');
+  const t = useTranslations('services.AfterSale_advantages');
 
   const advantages = [
     t('stats.0'),
     t('stats.1'),
     t('stats.2'),
-    t('stats.3')
+    t('stats.3'),
+    t('stats.4')
   ];
 
   return (

@@ -9,7 +9,7 @@ export default function LeasingAndFinancement({ button = false }) {
 
   return (
     <section className='relative bg-gray-50'>
-      <div className='section py-4 md:py-8 flex flex-col md:flex-row gap-6 md:gap-8 justify-between px-4 md:px-6'>
+      <div className='section py-4 md:py-8 flex flex-col md:flex-row gap-6 md:gap-8 justify-between items-center px-4 md:px-6'>
         <div className='w-full md:w-1/2' data-aos="fade-right">
           <Image
             src='/handshake.png'
@@ -28,7 +28,7 @@ export default function LeasingAndFinancement({ button = false }) {
           <p className='text-base md:text-xl text-justify'>{t('description')}</p>
           {button && (
             <Link
-              href={'/'}
+              href={'/leasing'}
               data-aos="fade-in"
               className='text-lg md:text-xl font-medium px-4 py-2 text-primary rounded-full flex items-center justify-center gap-4 hover:scale-95 border-2 border-primary hover:bg-primary hover:text-white'
             >

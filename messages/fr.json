@@ -10,12 +10,13 @@
   "footer": {
     "title": "Nous Sommes Là Pour Vous",
     "phone_label": "Numéro de téléphone :",
-    "phone": "+225 07 65 34 56 78",
+    "phone": "+213 5 61 64 61 90",
+    "phone-2": "+213 5 60 43 64 96",
     "email_label": "Email :",
-    "email": "contact@fennecholdings.dz",
+    "email": "contact@fennecholding.dz",
     "address_label": "Adresse :",
-    "address": "R.N-N°5 - Entrée De Hraicha Amar - Ain Smara (w) Constantine, Constantine 25140",
-    "copyright": "© 2025 Fennecholdings. Tous droits réservés."
+    "address": "Lotissement 212 N°14 - Ain Smara, Constantine.",
+    "copyright": "©2025 Fennecholding. Tous droits réservés, Conçu et développé par"
   },
   "hero": {
     "title": "Votre Partenaire de Construction",
@@ -34,7 +35,7 @@
       "description1": "Nous sommes bien plus qu’un fournisseur : nous sommes votre partenaire de confiance pour mener vos projets de construction à la réussite.",
       "description2": "Spécialisés dans les équipements pour le béton, nous offrons des solutions complètes, de la recherche et développement à la fabrication, en passant par un service après-vente de proximité.",
       "description3": "Nos machines, conçues selon les normes européennes les plus strictes, garantissent qualité, performance et sécurité.",
-      "stats": ["Paiements abordables", "Flexibilité des échéances"]
+      "stats": ["Plus de 30 d’éxistence", "Solutions personnalisées"]
     },
     "mission": {
       "label": "Notre Mission",
@@ -116,6 +117,10 @@
         "Disponibilité",
         "Prix Compétitifs"
       ]
+    },
+    "AfterSale_advantages": {
+      "title": "Avantages Fennec",
+      "stats": ["Réactivité immédiate", "Visites sur site", "Maintenance", "Experts qualifiés", "Support technique avancé"]
     },
     "after_sale": {
       "label": "Service Après-Vente",

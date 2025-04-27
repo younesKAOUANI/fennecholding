@@ -10,12 +10,13 @@
   "footer": {
     "title": "We Are Here for You",
     "phone_label": "Phone Number:",
-    "phone": "+225 07 65 34 56 78",
+    "phone": "+213 5 61 64 61 90",
+    "phone-2": "+213 5 60 43 64 96",
     "email_label": "Email:",
-    "email": "contact@fennecholdings.dz",
+    "email": "contact@fennecholding.dz",
     "address_label": "Address:",
-    "address": "R.N-N°5 - Entrée De Hraicha Amar - Ain Smara (w) Constantine, Constantine 25140",
-    "copyright": "© 2025 Fennecholdings. Tous droits réservés."
+    "address": "Lotissement 212 N°14 - Ain Smara, Constantine.",
+    "copyright": "©2025 Fennecholding. Tous droits réservés, Designed and developed by "
   },
   "hero": {
     "title": "Your Construction Partner",
@@ -35,8 +36,8 @@
       "description2": "Specialized in concrete equipment, we offer complete solutions, from research and development to manufacturing, with local after-sales service.",
       "description3": "Our machines, designed to the strictest European standards, guarantee quality, performance, and safety.",
       "stats": [
-        "Affordable Payments",
-        "Flexible Terms"
+        "More than 30 years of existence",
+        "Customized solutions"
       ]
     },
     "mission": {
@@ -122,6 +123,10 @@
         "Availability",
         "Competitive Prices"
       ]
+    },
+    "AfterSale_advantages": {
+      "title": "Fennec Advantages",
+      "stats": ["Immediate responsiveness", "Onsite visites", "Maintenance", "Qualified experts", "Advanced Technical Support"]
     },
     "after_sale": {
       "label": "After-Sale Service",

@@ -18,7 +18,7 @@ export default function Stats() {
       <div className='section grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 items-center px-4 py-12 md:px-6 md:py-16'>
         <h2
           data-aos='fade-right'
-          className='font-medium text-lg md:text-xl md:col-span-1 col-span-2 text-center md:text-left md:max-w-[150px]'
+          className='font-semibold text-lg md:text-xl md:col-span-1 col-span-2 text-center md:text-left md:max-w-[150px]'
         >
           {t('title')}
         </h2>

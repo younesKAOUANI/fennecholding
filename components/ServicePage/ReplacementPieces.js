@@ -10,7 +10,7 @@ export default function ReplacementPieces() {
 
   return (
     <section className='bg-gray-50'>
-      <div className='section flex flex-col md:flex-row gap-6 md:gap-8 justify-between px-4 py-12 md:px-6 md:py-16'>
+      <div className='section flex flex-col md:flex-row gap-6 md:gap-8 justify-between items-center px-4 py-12 md:px-6 md:py-16'>
         <div className='w-full md:w-1/2' data-aos="fade-right">
           <Image
             src='/images/solutions-2.png'
