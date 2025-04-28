@@ -27,7 +27,7 @@ export default function EditProduct() {
     const fetchData = async () => {
       try {
         // Fetch product
-        const productRes = await fetch(`/api/products/${id}`);
+        const productRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`);
         if (!productRes.ok) throw new Error('Failed to fetch product');
         const { product } = await productRes.json();
         setProductForm({

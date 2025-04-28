@@ -8,10 +8,10 @@ const prisma = new PrismaClient();
 
 export default async function auth(req, res) {
   // Set CORS headers for cross-domain requests from cPanel frontend
-  res.setHeader('Access-Control-Allow-Origin', 'https://fennecholding.dz');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Optional, if cookies are needed
 
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {

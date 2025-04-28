@@ -10,7 +10,7 @@ export default function Categories() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/categories', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

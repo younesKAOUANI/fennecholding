@@ -63,7 +63,7 @@ export default function ProductPage() {
     }
 
     setLoading(true);
-    fetch(`/api/products/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? t("productNotFound") : t("fetchError"));
         return res.json();
