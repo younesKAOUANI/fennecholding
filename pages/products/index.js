@@ -20,7 +20,7 @@ export default function Index() {
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/categories', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

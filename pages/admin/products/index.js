@@ -10,9 +10,10 @@ export default function Index() {
   const [data, setData] = useState([])
   const [filteredData, setFilteredData] = useState([])
 
+
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/products', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

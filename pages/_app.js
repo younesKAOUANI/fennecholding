@@ -48,7 +48,8 @@ export default function App({ Component, pageProps }) {
     try {
       if (pathname.startsWith("/admin")) {
         return (
-          <SessionProvider session={pageProps.session}>
+          <SessionProvider session={pageProps.session}
+          >
             <NextIntlClientProvider locale={locale} messages={messages}>
               <div dir={direction}>
                 <AdminLayout>
